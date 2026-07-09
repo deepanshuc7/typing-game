@@ -85,4 +85,4 @@ This project follows an iterative development process:
 
 ## Current Status
 
-Planning phase.
+Core Typing Experience

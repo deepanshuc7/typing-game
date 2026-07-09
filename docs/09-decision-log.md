@@ -176,6 +176,55 @@ A consistent commit history improves readability and supports future automation.
 
 ---
 
+# ADR-008: Configure TypeScript Path Aliases
+
+**Status:** Accepted  
+**Date:** 2026-07-09
+
+## Context
+
+As the project grows, the folder structure will become deeper, resulting in long and difficult-to-read relative import paths.
+
+Example:
+```
+import TypingArea from "../../../components/typing/TypingArea";
+```
+
+Deep relative imports reduce readability and make refactoring more difficult because moving files often requires updating numerous import statements.
+
+## Decision
+
+Configure a path alias (@) that maps to the src directory.
+
+Example:
+```
+import TypingArea from "@/components/typing/TypingArea";
+```
+
+## Alternatives Considered
+
+* Continue using relative imports (../../..)
+* Use multiple aliases (e.g., @components, @hooks, @utils)
+* Introduce a module resolution plugin later in the project
+
+## Rationale
+
+Using a single root alias provides several benefits:
+
+* Improves code readability by reducing long relative paths.
+* Simplifies refactoring, as file moves within src require fewer import changes.
+* Establishes a consistent import style across the project.
+* Aligns with common practices in modern React and TypeScript applications.
+* Keeps the configuration simple while allowing additional aliases to be introduced in the future if needed.
+
+## Consequences
+
+* All internal imports should use the @ alias instead of long relative paths.
+* Both TypeScript and Vite must be configured to resolve the alias.
+* New contributors only need to learn a single import convention.
+
+---
+
 # Future Decisions
 
 This document should be updated whenever a significant architectural or technical decision is made.

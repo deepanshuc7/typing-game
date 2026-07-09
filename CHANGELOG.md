@@ -10,6 +10,7 @@
 - GitHub issue templates
 - Pull request template
 - CI workflow placeholder
+- Add frontend setup changes
 
 ### Changed
 

@@ -43,7 +43,7 @@ This roadmap outlines the planned development phases for the Typing Game project
 * Development tooling
 * Base folder structure
 
-**Status:** Planned
+**Status:** Complete
 
 ---
 
