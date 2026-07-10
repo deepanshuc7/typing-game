@@ -22,6 +22,8 @@
 - Initial typing state model
 - First TDD test for the typing engine
 - Initial `useTypingTest` hook
+- Typing test start action
+- State transition from idle to running
 
 ### Changed
 
