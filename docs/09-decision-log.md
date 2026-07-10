@@ -228,3 +228,49 @@ Using a single root alias provides several benefits:
 # Future Decisions
 
 This document should be updated whenever a significant architectural or technical decision is made.
+
+# ADR-009: Adopt Vitest for Frontend Testing
+
+**Status:** Accepted  
+**Date:** 2026-07-10
+
+## Context
+
+The project requires a testing framework that integrates well with React, TypeScript, and Vite. Since the project follows Test-Driven Development (TDD), the testing solution should provide fast feedback during development while supporting unit and component testing.
+
+## Decision
+
+Use Vitest as the primary testing framework, together with:
+
+- React Testing Library
+- JSDOM
+- ```@testing-library/jest-dom```
+
+## Alternatives Considered
+
+* Jest
+* Cypress Component Testing
+* Playwright Component Testing
+
+## Rationale
+
+Vitest was chosen because:
+
+* It is built for Vite and integrates seamlessly with the existing build tool.
+* It offers significantly faster startup and test execution compared to Jest.
+* Its API is largely compatible with Jest, making it familiar to many developers.
+* React Testing Library complements Vitest by encouraging tests that focus on user behavior rather than implementation details.
+* It supports the project's TDD workflow with rapid feedback during development.
+
+## Consequences
+
+* All unit and component tests will use Vitest.
+* Test files will follow the *.test.ts or *.test.tsx naming convention.
+* The CI workflow will execute the Vitest suite on every push and pull request.
+* New business logic should be accompanied by corresponding unit tests before implementation whenever practical.
+
+---
+
+# Future Decisions
+
+This document should be updated whenever a significant architectural or technical decision is made.
