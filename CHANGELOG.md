@@ -19,6 +19,9 @@
 - Random word list
 - Tested word-generation utility
 - Dynamically generated typing text
+- Initial typing state model
+- First TDD test for the typing engine
+- Initial `useTypingTest` hook
 
 ### Changed
 

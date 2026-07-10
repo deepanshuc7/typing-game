@@ -1,18 +1,15 @@
-export type TestStatus = 
-    | "idle"
-    | "running"
-    | "finished";
+export type TestStatus = "idle" | "running" | "finished";
 
-    export interface TypingState {
-        status: TestStatus;
+export interface TypingState {
+  status: TestStatus;
 
-        words: string[];
+  words: string[];
 
-        typedText: string;
+  typedText: string;
 
-        currentWordIndex: number;
+  currentWordIndex: number;
 
-        currentCharacterIndex: number;
+  currentCharacterIndex: number;
 
-        mistakes: number;
-    }
+  mistakes: number;
+}
