@@ -36,6 +36,10 @@
 - Typing test reset action
 - Reusable initial-state factory
 - Tests for resetting and restarting a typing session
+- Reusable countdown timer hook
+- Timer start, stop, and reset actions
+- Timer completion callback
+- Unit tests using fake timers
 
 ### Changed
 
