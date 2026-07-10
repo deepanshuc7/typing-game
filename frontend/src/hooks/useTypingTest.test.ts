@@ -220,4 +220,27 @@ describe("useTypingTest", () => {
     expect(result.current.state.currentWordIndex).toBe(2);
     expect(result.current.state.currentCharacterIndex).toBe(4);
   });
+
+  it("resets the typing test to its initial state", () => {
+  const { result } = renderHook(() =>
+    useTypingTest({
+      words: ["hello", "world"],
+    }),
+  );
+
+  act(() => {
+    result.current.typeCharacter("x");
+    result.current.typeCharacter("e");
+    result.current.reset();
+  });
+
+  expect(result.current.state).toEqual({
+    status: "idle",
+    words: ["hello", "world"],
+    typedText: "",
+    currentWordIndex: 0,
+    currentCharacterIndex: 0,
+    mistakes: 0,
+  });
+});
 });
