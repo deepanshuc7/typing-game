@@ -1,9 +1,12 @@
-const sampleText = "the quick brown fox jumps over the lazy dog practice typing with accuracy";
+import { useMemo } from "react";
+import { words } from "@/data/words";
+import { generateWords } from "@/utils/generateWords";
 
 export function TypingArea() {
+  const generatedWords = useMemo(() => generateWords(words, 30), []);
   return (
     <section aria-label="Typing area">
-      <p>{sampleText}</p>
+      <p>{generatedWords.join(" ")}</p>
     </section>
   );
 }

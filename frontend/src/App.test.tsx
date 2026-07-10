@@ -6,16 +6,10 @@ describe("App", () => {
   it("renders the main typing interface", () => {
     render(<App />);
 
-    expect(
-      screen.getByRole("heading", { name: /typing game/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /typing game/i })).toBeInTheDocument();
 
-    expect(
-      screen.getByRole("region", { name: /typing area/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: /typing area/i })).toBeInTheDocument();
 
-    expect(
-      screen.getByRole("region", { name: /typing statistics/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: /typing statistics/i })).toBeInTheDocument();
   });
 });
