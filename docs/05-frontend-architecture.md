@@ -89,10 +89,11 @@ Manages countdown behavior.
 
 Responsibilities:
 
-* Start timer
-* Stop timer
-* Reset timer
-* Detect when time reaches zero
+- Store the remaining test duration
+- Start and stop the countdown
+- Prevent the timer from becoming negative
+- Reset to the configured duration
+- Notify the application when the countdown completes
 
 ---
 

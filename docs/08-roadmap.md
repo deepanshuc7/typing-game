@@ -61,7 +61,7 @@ This roadmap outlines the planned development phases for the Typing Game project
 
 * Functional typing interface
 
-**Status:** Planned
+**Status:** Complete
 
 ---
 
