@@ -91,6 +91,7 @@ Initially, React state and custom hooks will be sufficient. If the application g
 ## Business Logic Layer
 
 Contains all calculation and validation logic.
+Typing-related calculations and validation are implemented as pure utility functions. React hooks coordinate state updates while delegating business rules to the utility layer.
 
 Examples:
 

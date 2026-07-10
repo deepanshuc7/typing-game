@@ -36,7 +36,7 @@
 
 ### Changed
 
-- None
+- Extracted typing validation into reusable utility functions.
 
 ### Fixed
 

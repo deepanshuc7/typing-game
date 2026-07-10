@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { TypingState } from "@/types/typing";
+import { getTargetText, isCorrectCharacter } from "@/utils/typing";
 
 interface UseTypingTestOptions {
   words: string[];
@@ -9,10 +10,6 @@ interface UseTypingTestResult {
   state: TypingState;
   start: () => void;
   typeCharacter: (character: string) => void;
-}
-
-function getTargetText(words: string[]): string {
-  return words.join(" ");
 }
 
 export function useTypingTest({ words }: UseTypingTestOptions): UseTypingTestResult {
@@ -56,7 +53,7 @@ export function useTypingTest({ words }: UseTypingTestOptions): UseTypingTestRes
 
       const expectedCharacter = targetText[currentState.currentCharacterIndex];
 
-      const isMistake = character !== expectedCharacter;
+      const isMistake = !isCorrectCharacter(expectedCharacter, character);
 
       const completedSeparator = expectedCharacter === " " && character === expectedCharacter;
 
