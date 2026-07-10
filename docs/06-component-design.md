@@ -151,3 +151,14 @@ Possible future components:
 * WordListSelector
 * LeaderboardTable
 * UserStatsCard
+
+---
+
+## Implementation Status
+
+- [x] Header
+- [x] Footer
+- [x] TestControls
+- [x] StatsBar
+- [x] TypingArea
+- [ ] ResultModal
