@@ -62,4 +62,21 @@ describe("useTypingTest", () => {
     expect(result.current.state.typedText).toBe("h");
     expect(result.current.state.currentCharacterIndex).toBe(1);
   });
+
+  it("ignores empty strings and multi-character input", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("");
+      result.current.typeCharacter("ab");
+    });
+
+    expect(result.current.state.typedText).toBe("");
+    expect(result.current.state.currentCharacterIndex).toBe(0);
+    expect(result.current.state.status).toBe("idle");
+  });
 });

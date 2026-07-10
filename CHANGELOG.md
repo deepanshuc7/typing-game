@@ -24,6 +24,9 @@
 - Initial `useTypingTest` hook
 - Typing test start action
 - State transition from idle to running
+- Character input handling in the typing engine
+- Automatic test start on the first typed character
+- Validation for single-character input
 
 ### Changed
 

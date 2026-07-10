@@ -8,6 +8,7 @@ interface UseTypingTestOptions {
 interface UseTypingTestResult {
   state: TypingState;
   start: () => void;
+  typeCharacter: (character: string) => void;
 }
 
 export function useTypingTest({ words }: UseTypingTestOptions): UseTypingTestResult {
@@ -33,8 +34,28 @@ export function useTypingTest({ words }: UseTypingTestOptions): UseTypingTestRes
     });
   }
 
+  function typeCharacter(character: string) {
+    if (character.length !== 1) {
+      return;
+    }
+
+    setState((currentState) => {
+      if (currentState.status === "finished") {
+        return currentState;
+      }
+
+      return {
+        ...currentState,
+        status: currentState.status === "idle" ? "running" : currentState.status,
+        typedText: currentState.typedText + character,
+        currentCharacterIndex: currentState.currentCharacterIndex + 1,
+      };
+    });
+  }
+
   return {
     state,
     start,
+    typeCharacter,
   };
 }
