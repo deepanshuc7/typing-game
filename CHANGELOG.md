@@ -16,6 +16,9 @@
 - Static typing controls
 - Statistics display
 - Initial typing area
+- Random word list
+- Tested word-generation utility
+- Dynamically generated typing text
 
 ### Changed
 
