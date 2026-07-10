@@ -143,4 +143,63 @@ describe("useTypingTest", () => {
     expect(result.current.state.currentCharacterIndex).toBe(2);
     expect(result.current.state.mistakes).toBe(0);
   });
+
+  it("starts at the first word", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    expect(result.current.state.currentWordIndex).toBe(0);
+  });
+
+  it("remains on the first word while typing its characters", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("e");
+      result.current.typeCharacter("l");
+    });
+
+    expect(result.current.state.currentWordIndex).toBe(0);
+  });
+
+  it("advances to the next word after the separator is typed", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hi", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("i");
+      result.current.typeCharacter(" ");
+    });
+
+    expect(result.current.state.currentWordIndex).toBe(1);
+  });
+
+  it("does not advance to the next word when the separator is typed incorrectly", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hi", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("i");
+      result.current.typeCharacter("x");
+    });
+
+    expect(result.current.state.currentWordIndex).toBe(0);
+    expect(result.current.state.mistakes).toBe(1);
+  });
 });
