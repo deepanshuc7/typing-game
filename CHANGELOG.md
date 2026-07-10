@@ -33,6 +33,9 @@
 - Active word tracking
 - Word progression after correctly typed separators
 - Tests for multiple-word progression
+- Typing test reset action
+- Reusable initial-state factory
+- Tests for resetting and restarting a typing session
 
 ### Changed
 

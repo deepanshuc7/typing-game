@@ -222,25 +222,43 @@ describe("useTypingTest", () => {
   });
 
   it("resets the typing test to its initial state", () => {
-  const { result } = renderHook(() =>
-    useTypingTest({
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("x");
+      result.current.typeCharacter("e");
+      result.current.reset();
+    });
+
+    expect(result.current.state).toEqual({
+      status: "idle",
       words: ["hello", "world"],
-    }),
-  );
-
-  act(() => {
-    result.current.typeCharacter("x");
-    result.current.typeCharacter("e");
-    result.current.reset();
+      typedText: "",
+      currentWordIndex: 0,
+      currentCharacterIndex: 0,
+      mistakes: 0,
+    });
   });
 
-  expect(result.current.state).toEqual({
-    status: "idle",
-    words: ["hello", "world"],
-    typedText: "",
-    currentWordIndex: 0,
-    currentCharacterIndex: 0,
-    mistakes: 0,
+  it("can start again after being reset", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.reset();
+      result.current.typeCharacter("h");
+    });
+
+    expect(result.current.state.status).toBe("running");
+    expect(result.current.state.typedText).toBe("h");
+    expect(result.current.state.currentCharacterIndex).toBe(1);
   });
-});
 });

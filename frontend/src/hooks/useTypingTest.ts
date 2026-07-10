@@ -10,17 +10,22 @@ interface UseTypingTestResult {
   state: TypingState;
   start: () => void;
   typeCharacter: (character: string) => void;
+  reset: () => void;
 }
 
-export function useTypingTest({ words }: UseTypingTestOptions): UseTypingTestResult {
-  const [state, setState] = useState<TypingState>({
+function createInitialState(words: string[]): TypingState {
+  return {
     status: "idle",
     words,
     typedText: "",
     currentWordIndex: 0,
     currentCharacterIndex: 0,
     mistakes: 0,
-  });
+  };
+}
+
+export function useTypingTest({ words }: UseTypingTestOptions): UseTypingTestResult {
+  const [state, setState] = useState<TypingState>(() => createInitialState(words));
 
   function start() {
     setState((currentState) => {
@@ -68,9 +73,14 @@ export function useTypingTest({ words }: UseTypingTestOptions): UseTypingTestRes
     });
   }
 
+  function reset() {
+    setState(createInitialState(words));
+  }
+
   return {
     state,
     start,
     typeCharacter,
+    reset,
   };
 }
