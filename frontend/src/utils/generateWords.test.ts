@@ -21,14 +21,10 @@ describe("generateWords", () => {
   });
 
   it("throws an error when the word list is empty", () => {
-    expect(() => generateWords([], 5)).toThrow(
-      "Cannot generate words from an empty word list",
-    );
+    expect(() => generateWords([], 5)).toThrow("Cannot generate words from an empty word list");
   });
 
   it("throws an error when the requested count is negative", () => {
-    expect(() => generateWords(["one", "two"], -1)).toThrow(
-      "Word count cannot be negative",
-    );
+    expect(() => generateWords(["one", "two"], -1)).toThrow("Word count cannot be negative");
   });
 });
