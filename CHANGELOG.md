@@ -27,6 +27,9 @@
 - Character input handling in the typing engine
 - Automatic test start on the first typed character
 - Validation for single-character input
+- Character validation against generated typing text
+- Mistake tracking for incorrect input
+- Protection against input beyond the target text
 
 ### Changed
 

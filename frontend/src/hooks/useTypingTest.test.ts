@@ -81,48 +81,66 @@ describe("useTypingTest", () => {
   });
 
   it("does not increment mistakes for a correct character", () => {
-  const { result } = renderHook(() =>
-    useTypingTest({
-      words: ["hello", "world"],
-    }),
-  );
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
 
-  act(() => {
-    result.current.typeCharacter("h");
+    act(() => {
+      result.current.typeCharacter("h");
+    });
+
+    expect(result.current.state.mistakes).toBe(0);
   });
 
-  expect(result.current.state.mistakes).toBe(0);
-});
+  it("increments mistakes for an incorrect character", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
 
-it("increments mistakes for an incorrect character", () => {
-  const { result } = renderHook(() =>
-    useTypingTest({
-      words: ["hello", "world"],
-    }),
-  );
+    act(() => {
+      result.current.typeCharacter("x");
+    });
 
-  act(() => {
-    result.current.typeCharacter("x");
+    expect(result.current.state.mistakes).toBe(1);
   });
 
-  expect(result.current.state.mistakes).toBe(1);
-});
+  it("validates each character against the expected text", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
 
-it("validates each character against the expected text", () => {
-  const { result } = renderHook(() =>
-    useTypingTest({
-      words: ["hello", "world"],
-    }),
-  );
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("x");
+      result.current.typeCharacter("l");
+    });
 
-  act(() => {
-    result.current.typeCharacter("h");
-    result.current.typeCharacter("x");
-    result.current.typeCharacter("l");
+    expect(result.current.state.typedText).toBe("hxl");
+    expect(result.current.state.currentCharacterIndex).toBe(3);
+    expect(result.current.state.mistakes).toBe(1);
   });
 
-  expect(result.current.state.typedText).toBe("hxl");
-  expect(result.current.state.currentCharacterIndex).toBe(3);
-  expect(result.current.state.mistakes).toBe(1);
-});
+  it("ignores input after all target characters are typed", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hi"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("i");
+      result.current.typeCharacter("x");
+    });
+
+    expect(result.current.state.typedText).toBe("hi");
+    expect(result.current.state.currentCharacterIndex).toBe(2);
+    expect(result.current.state.mistakes).toBe(0);
+  });
 });
