@@ -33,4 +33,33 @@ describe("useTypingTest", () => {
 
     expect(result.current.state.status).toBe("running");
   });
+
+  it("starts automatically when the first character is typed", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+    });
+
+    expect(result.current.state.status).toBe("running");
+  });
+
+  it("stores the typed character and advances the character index", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+    });
+
+    expect(result.current.state.typedText).toBe("h");
+    expect(result.current.state.currentCharacterIndex).toBe(1);
+  });
 });
