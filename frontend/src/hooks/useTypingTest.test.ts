@@ -202,4 +202,22 @@ describe("useTypingTest", () => {
     expect(result.current.state.currentWordIndex).toBe(0);
     expect(result.current.state.mistakes).toBe(1);
   });
+
+  it("tracks progression across multiple words", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["a", "b", "c"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("a");
+      result.current.typeCharacter(" ");
+      result.current.typeCharacter("b");
+      result.current.typeCharacter(" ");
+    });
+
+    expect(result.current.state.currentWordIndex).toBe(2);
+    expect(result.current.state.currentCharacterIndex).toBe(4);
+  });
 });

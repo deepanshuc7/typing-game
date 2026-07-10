@@ -30,6 +30,9 @@
 - Character validation against generated typing text
 - Mistake tracking for incorrect input
 - Protection against input beyond the target text
+- Active word tracking
+- Word progression after correctly typed separators
+- Tests for multiple-word progression
 
 ### Changed
 

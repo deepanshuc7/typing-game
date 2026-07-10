@@ -225,10 +225,6 @@ Using a single root alias provides several benefits:
 
 ---
 
-# Future Decisions
-
-This document should be updated whenever a significant architectural or technical decision is made.
-
 # ADR-009: Adopt Vitest for Frontend Testing
 
 **Status:** Accepted  
@@ -268,6 +264,33 @@ Vitest was chosen because:
 * Test files will follow the *.test.ts or *.test.tsx naming convention.
 * The CI workflow will execute the Vitest suite on every push and pull request.
 * New business logic should be accompanied by corresponding unit tests before implementation whenever practical.
+
+---
+
+# ADR-010: Character and Word Position Semantics
+
+**Status:** Accepted  
+**Date:** 2026-07-10
+
+## Context
+
+The typing engine needs to track both the user's position in the complete target text and the currently active word.
+
+Resetting the character index after each word would make character validation against the complete target text unreliable.
+
+## Decision
+
+Use `currentCharacterIndex` as the absolute position in the complete target text and `currentWordIndex` as the index of the active word.
+
+## Rationale
+
+This keeps character lookup simple while allowing the interface to highlight the active word independently.
+
+## Consequences
+
+- `currentCharacterIndex` does not reset between words.
+- `currentWordIndex` advances only when the expected space is typed correctly.
+- A more explicit name such as `currentTextIndex` may be introduced during a future refactor.
 
 ---
 
