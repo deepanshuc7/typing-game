@@ -115,6 +115,11 @@ Generates a random list of words for the test.
 
 Compares expected text with typed text.
 
+### typing.ts
+
+- getTargetText()
+- isCorrectCharacter()
+
 ---
 
 ## 6. Types

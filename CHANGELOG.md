@@ -19,10 +19,27 @@
 - Random word list
 - Tested word-generation utility
 - Dynamically generated typing text
+- Initial typing state model
+- First TDD test for the typing engine
+- Initial `useTypingTest` hook
+- Typing test start action
+- State transition from idle to running
+- Character input handling in the typing engine
+- Automatic test start on the first typed character
+- Validation for single-character input
+- Character validation against generated typing text
+- Mistake tracking for incorrect input
+- Protection against input beyond the target text
+- Active word tracking
+- Word progression after correctly typed separators
+- Tests for multiple-word progression
+- Typing test reset action
+- Reusable initial-state factory
+- Tests for resetting and restarting a typing session
 
 ### Changed
 
-- None
+- Extracted typing validation into reusable utility functions.
 
 ### Fixed
 

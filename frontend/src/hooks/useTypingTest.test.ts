@@ -1,0 +1,264 @@
+import { act, renderHook } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { useTypingTest } from "./useTypingTest";
+
+describe("useTypingTest", () => {
+  it("starts with the expected initial state", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    expect(result.current.state).toEqual({
+      status: "idle",
+      words: ["hello", "world"],
+      typedText: "",
+      currentWordIndex: 0,
+      currentCharacterIndex: 0,
+      mistakes: 0,
+    });
+  });
+
+  it("starts the typing test", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.start();
+    });
+
+    expect(result.current.state.status).toBe("running");
+  });
+
+  it("starts automatically when the first character is typed", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+    });
+
+    expect(result.current.state.status).toBe("running");
+  });
+
+  it("stores the typed character and advances the character index", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+    });
+
+    expect(result.current.state.typedText).toBe("h");
+    expect(result.current.state.currentCharacterIndex).toBe(1);
+  });
+
+  it("ignores empty strings and multi-character input", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("");
+      result.current.typeCharacter("ab");
+    });
+
+    expect(result.current.state.typedText).toBe("");
+    expect(result.current.state.currentCharacterIndex).toBe(0);
+    expect(result.current.state.status).toBe("idle");
+  });
+
+  it("does not increment mistakes for a correct character", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+    });
+
+    expect(result.current.state.mistakes).toBe(0);
+  });
+
+  it("increments mistakes for an incorrect character", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("x");
+    });
+
+    expect(result.current.state.mistakes).toBe(1);
+  });
+
+  it("validates each character against the expected text", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("x");
+      result.current.typeCharacter("l");
+    });
+
+    expect(result.current.state.typedText).toBe("hxl");
+    expect(result.current.state.currentCharacterIndex).toBe(3);
+    expect(result.current.state.mistakes).toBe(1);
+  });
+
+  it("ignores input after all target characters are typed", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hi"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("i");
+      result.current.typeCharacter("x");
+    });
+
+    expect(result.current.state.typedText).toBe("hi");
+    expect(result.current.state.currentCharacterIndex).toBe(2);
+    expect(result.current.state.mistakes).toBe(0);
+  });
+
+  it("starts at the first word", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    expect(result.current.state.currentWordIndex).toBe(0);
+  });
+
+  it("remains on the first word while typing its characters", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("e");
+      result.current.typeCharacter("l");
+    });
+
+    expect(result.current.state.currentWordIndex).toBe(0);
+  });
+
+  it("advances to the next word after the separator is typed", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hi", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("i");
+      result.current.typeCharacter(" ");
+    });
+
+    expect(result.current.state.currentWordIndex).toBe(1);
+  });
+
+  it("does not advance to the next word when the separator is typed incorrectly", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hi", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("i");
+      result.current.typeCharacter("x");
+    });
+
+    expect(result.current.state.currentWordIndex).toBe(0);
+    expect(result.current.state.mistakes).toBe(1);
+  });
+
+  it("tracks progression across multiple words", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["a", "b", "c"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("a");
+      result.current.typeCharacter(" ");
+      result.current.typeCharacter("b");
+      result.current.typeCharacter(" ");
+    });
+
+    expect(result.current.state.currentWordIndex).toBe(2);
+    expect(result.current.state.currentCharacterIndex).toBe(4);
+  });
+
+  it("resets the typing test to its initial state", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("x");
+      result.current.typeCharacter("e");
+      result.current.reset();
+    });
+
+    expect(result.current.state).toEqual({
+      status: "idle",
+      words: ["hello", "world"],
+      typedText: "",
+      currentWordIndex: 0,
+      currentCharacterIndex: 0,
+      mistakes: 0,
+    });
+  });
+
+  it("can start again after being reset", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.reset();
+      result.current.typeCharacter("h");
+    });
+
+    expect(result.current.state.status).toBe("running");
+    expect(result.current.state.typedText).toBe("h");
+    expect(result.current.state.currentCharacterIndex).toBe(1);
+  });
+});
