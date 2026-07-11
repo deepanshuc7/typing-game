@@ -196,3 +196,31 @@ The system should be:
 * Accessible
 * Easy to test
 * Easy to extend
+
+# 10. Deployment Architecture
+
+The MVP frontend is deployed as a static Vite application.
+
+```text
+Developer
+    │
+    ▼
+Feature Branch
+    │
+    ▼
+GitHub Pull Request
+    │
+    ├── GitHub Actions
+    │      ├── Lint
+    │      ├── Test
+    │      └── Build
+    │
+    ▼
+Merge to Main
+    │
+    ▼
+Vercel
+    │
+    ▼
+Production Website
+
