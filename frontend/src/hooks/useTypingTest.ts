@@ -12,6 +12,7 @@ interface UseTypingTestResult {
   finish: () => void;
   typeCharacter: (character: string) => void;
   reset: () => void;
+  deleteCharacter: () => void;
 }
 
 function createInitialState(words: string[]): TypingState {
@@ -87,6 +88,34 @@ export function useTypingTest({ words }: UseTypingTestOptions): UseTypingTestRes
     });
   }, []);
 
+  function deleteCharacter() {
+    setState((currentState) => {
+      if (currentState.status === "finished" || currentState.currentCharacterIndex === 0) {
+        return currentState;
+      }
+
+      const targetText = getTargetText(currentState.words);
+
+      const deletedIndex = currentState.currentCharacterIndex - 1;
+
+      const deletedCharacter = currentState.typedText[deletedIndex];
+
+      const expectedCharacter = targetText[deletedIndex];
+
+      const deletedCharacterWasMistake = !isCorrectCharacter(expectedCharacter, deletedCharacter);
+
+      const deletedSeparator = expectedCharacter === " " && deletedCharacter === " ";
+
+      return {
+        ...currentState,
+        typedText: currentState.typedText.slice(0, -1),
+        currentCharacterIndex: deletedIndex,
+        currentWordIndex: currentState.currentWordIndex - (deletedSeparator ? 1 : 0),
+        mistakes: currentState.mistakes - (deletedCharacterWasMistake ? 1 : 0),
+      };
+    });
+  }
+
   function reset() {
     setState(createInitialState(words));
   }
@@ -96,6 +125,7 @@ export function useTypingTest({ words }: UseTypingTestOptions): UseTypingTestRes
     start,
     finish,
     typeCharacter,
+    deleteCharacter,
     reset,
   };
 }

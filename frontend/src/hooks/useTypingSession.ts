@@ -14,6 +14,7 @@ export function useTypingSession({ words, duration }: UseTypingSessionOptions) {
     state,
     finish,
     typeCharacter: typeTestCharacter,
+    deleteCharacter: deleteTestCharacter,
     reset: resetTypingTest,
   } = useTypingTest({ words });
 
@@ -55,6 +56,14 @@ export function useTypingSession({ words, duration }: UseTypingSessionOptions) {
     [startTimer, state.status, typeTestCharacter],
   );
 
+  const deleteCharacter = useCallback(() => {
+    if (state.status === "finished") {
+      return;
+    }
+
+    deleteTestCharacter();
+  }, [deleteTestCharacter, state.status]);
+
   const reset = useCallback(() => {
     resetTypingTest();
     resetTimer();
@@ -66,6 +75,7 @@ export function useTypingSession({ words, duration }: UseTypingSessionOptions) {
     timeRemaining,
     isTimerRunning,
     typeCharacter,
+    deleteCharacter,
     reset,
   };
 }
