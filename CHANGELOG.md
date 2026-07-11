@@ -49,6 +49,9 @@
 - Accuracy calculation
 - Correct and incorrect character counts
 - Combined typing statistics result
+- Live typing statistics exposed by the typing session
+- Dynamic statistics bar
+- Component tests for typing statistics display
 
 ### Changed
 

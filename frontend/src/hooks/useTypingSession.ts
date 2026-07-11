@@ -1,6 +1,8 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useTimer } from "@/hooks/useTimer";
 import { useTypingTest } from "@/hooks/useTypingTest";
+import { calculateTypingStats } from "@/utils/calculateStats";
+import { getTargetText } from "@/utils/typing";
 
 interface UseTypingSessionOptions {
   words: string[];
@@ -24,6 +26,14 @@ export function useTypingSession({ words, duration }: UseTypingSessionOptions) {
     onComplete: handleTimerComplete,
   });
 
+  const targetText = getTargetText(state.words);
+  const elapsedSeconds = duration - timer.timeRemaining;
+
+  const stats = useMemo(
+    () => calculateTypingStats(targetText, state.typedText, elapsedSeconds),
+    [elapsedSeconds, state.typedText, targetText],
+  );
+
   function typeCharacter(character: string) {
     if (state.status === "finished") {
       return;
@@ -43,6 +53,7 @@ export function useTypingSession({ words, duration }: UseTypingSessionOptions) {
 
   return {
     state,
+    stats,
     timeRemaining: timer.timeRemaining,
     isTimerRunning: timer.isRunning,
     typeCharacter,

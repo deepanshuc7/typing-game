@@ -99,4 +99,26 @@ describe("useTypingSession", () => {
 
     expect(result.current.state.typedText).toBe("h");
   });
+
+  it("exposes live typing statistics", async () => {
+    const { result } = renderHook(() =>
+      useTypingSession({
+        words: ["hello"],
+        duration: 60,
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("x");
+    });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1000);
+    });
+
+    expect(result.current.stats.correctCharacters).toBe(1);
+    expect(result.current.stats.incorrectCharacters).toBe(1);
+    expect(result.current.stats.accuracy).toBe(50);
+  });
 });
