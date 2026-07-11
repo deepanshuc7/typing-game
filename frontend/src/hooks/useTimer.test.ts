@@ -206,4 +206,19 @@ describe("useTimer", () => {
     expect(result.current.timeRemaining).toBe(4);
     expect(result.current.isRunning).toBe(true);
   });
+
+  it("resets to a new duration when provided", () => {
+    const { result } = renderHook(() =>
+      useTimer({
+        duration: 30,
+      }),
+    );
+
+    act(() => {
+      result.current.reset(60);
+    });
+
+    expect(result.current.timeRemaining).toBe(60);
+    expect(result.current.isRunning).toBe(false);
+  });
 });

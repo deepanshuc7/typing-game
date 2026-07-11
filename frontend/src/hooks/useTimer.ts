@@ -10,7 +10,7 @@ interface UseTimerResult {
   isRunning: boolean;
   start: () => void;
   stop: () => void;
-  reset: () => void;
+  reset: (nextDuration?: number) => void;
 }
 
 export function useTimer({ duration, onComplete }: UseTimerOptions): UseTimerResult {
@@ -53,9 +53,9 @@ export function useTimer({ duration, onComplete }: UseTimerOptions): UseTimerRes
     setIsRunning(false);
   }
 
-  function reset() {
+  function reset(nextDuration = duration) {
     setIsRunning(false);
-    setTimeRemaining(duration);
+    setTimeRemaining(nextDuration);
   }
 
   return {
