@@ -21,41 +21,50 @@ export function useTypingSession({ words, duration }: UseTypingSessionOptions) {
     finish();
   }, [finish]);
 
-  const timer = useTimer({
+  const {
+    timeRemaining,
+    isRunning: isTimerRunning,
+    start: startTimer,
+    reset: resetTimer,
+  } = useTimer({
     duration,
     onComplete: handleTimerComplete,
   });
 
-  const targetText = getTargetText(state.words);
-  const elapsedSeconds = duration - timer.timeRemaining;
+  const targetText = useMemo(() => getTargetText(state.words), [state.words]);
+
+  const elapsedSeconds = duration - timeRemaining;
 
   const stats = useMemo(
     () => calculateTypingStats(targetText, state.typedText, elapsedSeconds),
     [elapsedSeconds, state.typedText, targetText],
   );
 
-  function typeCharacter(character: string) {
-    if (state.status === "finished") {
-      return;
-    }
+  const typeCharacter = useCallback(
+    (character: string) => {
+      if (state.status === "finished") {
+        return;
+      }
 
-    if (state.status === "idle") {
-      timer.start();
-    }
+      if (state.status === "idle") {
+        startTimer();
+      }
 
-    typeTestCharacter(character);
-  }
+      typeTestCharacter(character);
+    },
+    [startTimer, state.status, typeTestCharacter],
+  );
 
-  function reset() {
+  const reset = useCallback(() => {
     resetTypingTest();
-    timer.reset();
-  }
+    resetTimer();
+  }, [resetTimer, resetTypingTest]);
 
   return {
     state,
     stats,
-    timeRemaining: timer.timeRemaining,
-    isTimerRunning: timer.isRunning,
+    timeRemaining,
+    isTimerRunning,
     typeCharacter,
     reset,
   };

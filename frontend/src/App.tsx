@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { TestControls } from "@/components/controls/TestControls";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -12,12 +12,28 @@ import { getTargetText } from "./utils/typing";
 function App() {
   const generatedWords = useMemo(() => generateWords(words, 30), []);
 
-  const { state, stats, timeRemaining } = useTypingSession({
+  const { state, stats, timeRemaining, typeCharacter } = useTypingSession({
     words: generatedWords,
     duration: 30,
   });
 
   const targetText = getTargetText(state.words);
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.ctrlKey || event.metaKey || event.altKey || event.key.length !== 1) {
+        return;
+      }
+
+      typeCharacter(event.key);
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [typeCharacter]);
 
   return (
     <div className="app">

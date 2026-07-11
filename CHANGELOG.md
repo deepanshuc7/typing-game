@@ -52,6 +52,9 @@
 - Live typing statistics exposed by the typing session
 - Dynamic statistics bar
 - Component tests for typing statistics display
+- Global keyboard input handling
+- Live character feedback while typing
+- Keyboard interaction test coverage
 
 ### Changed
 
