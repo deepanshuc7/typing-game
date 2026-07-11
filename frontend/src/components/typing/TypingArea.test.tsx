@@ -26,27 +26,18 @@ describe("TypingArea", () => {
   });
 
   it("references the typing instructions", () => {
-  render(
-    <>
-      <p id="typing-instructions">
-        Start typing to begin the test.
-      </p>
+    render(
+      <>
+        <p id="typing-instructions">Start typing to begin the test.</p>
 
-      <TypingArea
-        targetText="hello"
-        typedText=""
-        describedBy="typing-instructions"
-      />
-    </>,
-  );
+        <TypingArea targetText="hello" typedText="" describedBy="typing-instructions" />
+      </>,
+    );
 
-  expect(
-    screen.getByRole("region", {
-      name: /typing area/i,
-    }),
-  ).toHaveAttribute(
-    "aria-describedby",
-    "typing-instructions",
-  );
-});
+    expect(
+      screen.getByRole("region", {
+        name: /typing area/i,
+      }),
+    ).toHaveAttribute("aria-describedby", "typing-instructions");
+  });
 });

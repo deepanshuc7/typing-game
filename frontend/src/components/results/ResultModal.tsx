@@ -1,4 +1,5 @@
 import type { TypingStats } from "@/types/typing";
+import "./ResultModal.css";
 
 interface ResultModalProps {
   isOpen: boolean;
@@ -12,18 +13,51 @@ export function ResultModal({ isOpen, stats, onRestart }: ResultModalProps) {
   }
 
   return (
-    <section role="dialog" aria-modal="true" aria-labelledby="results-title">
-      <h2 id="results-title">Typing Results</h2>
+    <div className="result-modal__backdrop">
+      <section
+        className="result-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="results-title"
+      >
+        <div className="result-modal__header">
+          <p className="result-modal__eyebrow">Test complete</p>
+          <h2 id="results-title">Typing Results</h2>
+        </div>
 
-      <p>WPM: {stats.wpm}</p>
-      <p>Accuracy: {stats.accuracy}%</p>
-      <p>Correct characters: {stats.correctCharacters}</p>
-      <p>Incorrect characters: {stats.incorrectCharacters}</p>
-      <p>Total characters: {stats.totalCharacters}</p>
+        <div className="result-modal__highlight">
+          <div>
+            <span className="result-modal__value">{stats.wpm}</span>
+            <span className="result-modal__metric">WPM</span>
+          </div>
 
-      <button type="button" onClick={onRestart}>
-        Try Again
-      </button>
-    </section>
+          <div>
+            <span className="result-modal__value">{stats.accuracy}%</span>
+            <span className="result-modal__metric">Accuracy</span>
+          </div>
+        </div>
+
+        <div className="result-modal__details">
+          <div>
+            <span>Correct characters</span>
+            <strong>{stats.correctCharacters}</strong>
+          </div>
+
+          <div>
+            <span>Incorrect characters</span>
+            <strong>{stats.incorrectCharacters}</strong>
+          </div>
+
+          <div>
+            <span>Total characters</span>
+            <strong>{stats.totalCharacters}</strong>
+          </div>
+        </div>
+
+        <button className="result-modal__button" type="button" onClick={onRestart}>
+          Try again
+        </button>
+      </section>
+    </div>
   );
 }

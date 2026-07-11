@@ -6,17 +6,9 @@ interface TypingAreaProps {
   describedBy?: string;
 }
 
-export function TypingArea({
-  targetText,
-  typedText,
-  describedBy,
-}: TypingAreaProps) {
+export function TypingArea({ targetText, typedText, describedBy }: TypingAreaProps) {
   return (
-    <section
-      className="typing-area"
-      aria-label="Typing area"
-      aria-describedby={describedBy}
-    >
+    <section className="typing-area" aria-label="Typing area" aria-describedby={describedBy}>
       <p className="typing-area__text">
         {targetText.split("").map((character, index) => {
           const typedCharacter = typedText[index];

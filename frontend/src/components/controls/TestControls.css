@@ -1,0 +1,51 @@
+.test-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.test-controls__label {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.test-controls__options {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.35rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+}
+
+.test-controls__button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 0.9rem;
+  background: transparent;
+  color: var(--color-text-muted);
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.test-controls__button:hover:not(:disabled) {
+  color: var(--color-text);
+}
+
+.test-controls__button[aria-pressed="true"] {
+  background: var(--color-accent);
+  color: var(--color-background);
+  font-weight: 600;
+}
+
+.test-controls__button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.test-controls__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
