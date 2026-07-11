@@ -54,11 +54,11 @@ export function useTypingSession({ words, duration }: UseTypingSessionOptions) {
 
       const isFinalCharacter = state.currentCharacterIndex === targetText.length - 1;
 
-      typeTestCharacter(character);
-
       if (isFinalCharacter) {
         stopTimer();
       }
+
+      typeTestCharacter(character);
     },
     [
       startTimer,
@@ -80,10 +80,11 @@ export function useTypingSession({ words, duration }: UseTypingSessionOptions) {
 
   const reset = useCallback(
     (nextDuration?: number) => {
+      stopTimer();
       resetTypingTest();
       resetTimer(nextDuration);
     },
-    [resetTimer, resetTypingTest],
+    [resetTimer, resetTypingTest, stopTimer],
   );
 
   return {
