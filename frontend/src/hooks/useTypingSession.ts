@@ -26,6 +26,7 @@ export function useTypingSession({ words, duration }: UseTypingSessionOptions) {
     timeRemaining,
     isRunning: isTimerRunning,
     start: startTimer,
+    stop: stopTimer,
     reset: resetTimer,
   } = useTimer({
     duration,
@@ -51,9 +52,22 @@ export function useTypingSession({ words, duration }: UseTypingSessionOptions) {
         startTimer();
       }
 
+      const isFinalCharacter = state.currentCharacterIndex === targetText.length - 1;
+
       typeTestCharacter(character);
+
+      if (isFinalCharacter) {
+        stopTimer();
+      }
     },
-    [startTimer, state.status, typeTestCharacter],
+    [
+      startTimer,
+      state.currentCharacterIndex,
+      state.status,
+      stopTimer,
+      targetText.length,
+      typeTestCharacter,
+    ],
   );
 
   const deleteCharacter = useCallback(() => {

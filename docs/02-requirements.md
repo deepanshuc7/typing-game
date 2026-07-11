@@ -78,7 +78,12 @@ During the test the system shall calculate:
 
 ### FR-008 Test Completion
 
-When the timer reaches zero, the application shall stop accepting input and display the results.
+The typing test shall end when either:
+
+- The configured timer reaches zero, or
+- The user reaches the end of the generated target text.
+
+After completion, the application shall stop accepting input and display the results.
 
 ---
 

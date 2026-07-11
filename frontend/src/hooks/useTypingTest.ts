@@ -62,11 +62,17 @@ export function useTypingTest({ words }: UseTypingTestOptions): UseTypingTestRes
 
       const isMistake = !isCorrectCharacter(expectedCharacter, character);
 
+      const isFinalCharacter = currentState.currentCharacterIndex === targetText.length - 1;
+
       const completedSeparator = expectedCharacter === " " && character === expectedCharacter;
 
       return {
         ...currentState,
-        status: currentState.status === "idle" ? "running" : currentState.status,
+        status: isFinalCharacter
+          ? "finished"
+          : currentState.status === "idle"
+            ? "running"
+            : currentState.status,
         typedText: currentState.typedText + character,
         currentWordIndex: currentState.currentWordIndex + (completedSeparator ? 1 : 0),
         currentCharacterIndex: currentState.currentCharacterIndex + 1,

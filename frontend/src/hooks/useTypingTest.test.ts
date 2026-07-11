@@ -367,4 +367,38 @@ describe("useTypingTest", () => {
 
     expect(result.current.state.currentWordIndex).toBe(0);
   });
+
+  it("finishes the test when the final character is typed", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hi"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("i");
+    });
+
+    expect(result.current.state.status).toBe("finished");
+    expect(result.current.state.typedText).toBe("hi");
+    expect(result.current.state.currentCharacterIndex).toBe(2);
+  });
+
+  it("finishes the test when the final character is typed", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hi"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("i");
+    });
+
+    expect(result.current.state.status).toBe("finished");
+    expect(result.current.state.typedText).toBe("hi");
+    expect(result.current.state.currentCharacterIndex).toBe(2);
+  });
 });
