@@ -20,6 +20,22 @@ The application will allow users to:
 
 ---
 
+## Live Demo
+
+The application is deployed online and available at:
+
+[View Live Demo](https://type-type-delta.vercel.app/)
+
+## Deployment
+
+The frontend is deployed using Vercel.
+
+Every pull request is validated through the CI pipeline before being merged into the main branch.
+
+Production deployments are created from the main branch.
+
+---
+
 ## Technology Stack
 
 ### Frontend

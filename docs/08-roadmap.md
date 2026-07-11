@@ -79,7 +79,7 @@ This roadmap outlines the planned development phases for the Typing Game project
 
 * Live statistics dashboard
 
-**Status:** Planned
+**Status:** Complete
 
 ---
 
@@ -96,7 +96,7 @@ This roadmap outlines the planned development phases for the Typing Game project
 * Results screen
 * Improved interactions
 
-**Status:** Planned
+**Status:** Complete
 
 ---
 
@@ -113,7 +113,7 @@ This roadmap outlines the planned development phases for the Typing Game project
 
 * Reliable and tested application
 
-**Status:** Planned
+**Status:** Complete
 
 ---
 
@@ -130,7 +130,7 @@ This roadmap outlines the planned development phases for the Typing Game project
 
 * Production-ready user interface
 
-**Status:** Planned
+**Status:** Complete
 
 ---
 
@@ -148,6 +148,65 @@ Possible future work:
 * PostgreSQL database
 
 **Status:** Future
+
+---
+
+# Phase 9 — Deployment
+
+## Objectives
+
+- Verify the production build
+- Configure continuous integration
+- Deploy the frontend
+- Test the production environment
+- Add the live application URL to the repository
+
+## Deliverables
+
+- Public production deployment
+- Automated CI validation
+- Production-ready project documentation
+
+**Status:** Complete
+
+---
+
+# ADR-011: Deploy the Frontend with Vercel
+
+**Status:** Accepted
+
+## Context
+
+The frontend requires a hosting platform that supports Vite applications, Git-based deployments, production hosting, and preview environments for pull requests.
+
+## Decision
+
+Deploy the React and Vite frontend using Vercel.
+
+## Alternatives Considered
+
+- Netlify
+- Cloudflare Pages
+- GitHub Pages
+
+## Rationale
+
+Vercel was selected because it provides:
+
+- Native support for Vite applications
+- GitHub repository integration
+- Automatic production deployments
+- Preview deployments for pull requests
+- Minimal deployment configuration
+
+The platform also fits the project's branch-based development and pull request workflow.
+
+## Consequences
+
+- The `frontend` directory is configured as the deployment root.
+- Production deployments are created from the `main` branch.
+- Pull requests may be tested using preview deployments.
+- The application is currently coupled to Vercel for hosting configuration, although the generated Vite build remains portable to other static hosting platforms.
 
 ---
 

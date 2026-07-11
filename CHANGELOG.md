@@ -74,6 +74,10 @@
 - Improved typing feedback styles
 - Responsive statistics layout
 - Typing instructions for assistive technology
+- Production deployment configuration
+- Automated CI validation before deployment
+- Public live application
+- Deployment documentation
 
 ### Changed
 
