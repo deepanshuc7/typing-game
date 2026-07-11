@@ -13,3 +13,15 @@ export interface TypingState {
 
   mistakes: number;
 }
+
+export interface TypingStats {
+  wpm: number;
+
+  accuracy: number;
+
+  correctCharacters: number;
+
+  incorrectCharacters: number;
+
+  totalCharacters: number;
+}

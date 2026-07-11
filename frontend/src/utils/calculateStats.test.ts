@@ -3,6 +3,7 @@ import {
   calculateAccuracy,
   calculateCorrectCharacters,
   calculateIncorrectCharacters,
+  calculateTypingStats,
   calculateWpm,
 } from "./calculateStats";
 
@@ -47,5 +48,17 @@ describe("calculateWpm", () => {
 
   it("returns zero when elapsed time is zero", () => {
     expect(calculateWpm(100, 0)).toBe(0);
+  });
+
+  describe("calculateTypingStats", () => {
+    it("returns a complete typing statistics object", () => {
+      expect(calculateTypingStats("hello world", "hello xorld", 60)).toEqual({
+        wpm: 2,
+        accuracy: 91,
+        correctCharacters: 10,
+        incorrectCharacters: 1,
+        totalCharacters: 11,
+      });
+    });
   });
 });

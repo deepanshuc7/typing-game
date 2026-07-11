@@ -44,6 +44,11 @@
 - Automatic timer start on first input
 - Automatic test completion when time expires
 - Combined reset behavior for timer and typing state
+- Typing statistics utility functions
+- WPM calculation
+- Accuracy calculation
+- Correct and incorrect character counts
+- Combined typing statistics result
 
 ### Changed
 
