@@ -55,6 +55,9 @@
 - Global keyboard input handling
 - Live character feedback while typing
 - Keyboard interaction test coverage
+- Backspace support
+- Correction of mistake counts after deletion
+- Word index rollback when deleting separators
 
 ### Changed
 
