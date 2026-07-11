@@ -7,6 +7,7 @@ import { TypingArea } from "@/components/typing/TypingArea";
 import { words } from "@/data/words";
 import { useTypingSession } from "@/hooks/useTypingSession";
 import { generateWords } from "@/utils/generateWords";
+import { getTargetText } from "./utils/typing";
 
 function App() {
   const generatedWords = useMemo(() => generateWords(words, 30), []);
@@ -15,6 +16,8 @@ function App() {
     words: generatedWords,
     duration: 30,
   });
+
+  const targetText = getTargetText(state.words);
 
   return (
     <div className="app">
@@ -30,7 +33,7 @@ function App() {
           timeRemaining={timeRemaining}
         />
 
-        <TypingArea />
+        <TypingArea targetText={targetText} typedText={state.typedText} />
       </main>
 
       <Footer />
