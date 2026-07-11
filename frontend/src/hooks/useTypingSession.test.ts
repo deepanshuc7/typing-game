@@ -148,4 +148,39 @@ describe("useTypingSession", () => {
     expect(result.current.isTimerRunning).toBe(false);
     expect(result.current.timeRemaining).toBe(40);
   });
+
+  it("keeps final statistics frozen after finishing the text early", async () => {
+    const { result } = renderHook(() =>
+      useTypingSession({
+        words: ["hi"],
+        duration: 60,
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+    });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(20_000);
+    });
+
+    act(() => {
+      result.current.typeCharacter("i");
+    });
+
+    const finalWpm = result.current.stats.wpm;
+    const finalTimeRemaining = result.current.timeRemaining;
+
+    expect(result.current.state.status).toBe("finished");
+    expect(result.current.isTimerRunning).toBe(false);
+    expect(finalTimeRemaining).toBe(40);
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_000);
+    });
+
+    expect(result.current.timeRemaining).toBe(finalTimeRemaining);
+    expect(result.current.stats.wpm).toBe(finalWpm);
+  });
 });

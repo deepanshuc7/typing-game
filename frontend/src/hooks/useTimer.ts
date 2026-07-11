@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface UseTimerOptions {
   duration: number;
@@ -41,22 +41,31 @@ export function useTimer({ duration, onComplete }: UseTimerOptions): UseTimerRes
     };
   }, [isRunning, onComplete]);
 
-  function start() {
-    if (timeRemaining <= 0 || isRunning) {
+  const start = useCallback(() => {
+    if (timeRemaining <= 0) {
       return;
     }
 
-    setIsRunning(true);
-  }
+    setIsRunning((currentlyRunning) => {
+      if (currentlyRunning) {
+        return currentlyRunning;
+      }
 
-  function stop() {
-    setIsRunning(false);
-  }
+      return true;
+    });
+  }, [timeRemaining]);
 
-  function reset(nextDuration = duration) {
+  const stop = useCallback(() => {
     setIsRunning(false);
-    setTimeRemaining(nextDuration);
-  }
+  }, []);
+
+  const reset = useCallback(
+    (nextDuration = duration) => {
+      setIsRunning(false);
+      setTimeRemaining(nextDuration);
+    },
+    [duration],
+  );
 
   return {
     timeRemaining,
