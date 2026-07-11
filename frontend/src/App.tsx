@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { TestControls } from "@/components/controls/TestControls";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { StatsBar } from "@/components/stats/StatsBar";
 import { TypingArea } from "@/components/typing/TypingArea";
+import { RestartButton } from "@/components/controls/RestartButton";
 import { words } from "@/data/words";
 import { useTypingSession } from "@/hooks/useTypingSession";
 import { generateWords } from "@/utils/generateWords";
@@ -12,7 +13,7 @@ import { getTargetText } from "./utils/typing";
 function App() {
   const [duration, setDuration] = useState(30);
 
-  const generatedWords = useMemo(() => generateWords(words, 30), []);
+  const [generatedWords, setGeneratedWords] = useState(() => generateWords(words, 30));
 
   const { state, stats, timeRemaining, typeCharacter, deleteCharacter, reset } = useTypingSession({
     words: generatedWords,
@@ -28,6 +29,11 @@ function App() {
 
     setDuration(nextDuration);
     reset(nextDuration);
+  }
+
+  function handleRestart() {
+    setGeneratedWords(generateWords(words, 30));
+    reset();
   }
 
   useEffect(() => {
@@ -75,6 +81,8 @@ function App() {
         />
 
         <TypingArea targetText={targetText} typedText={state.typedText} />
+
+        <RestartButton onRestart={handleRestart} />
       </main>
 
       <Footer />

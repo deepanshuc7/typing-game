@@ -68,4 +68,26 @@ describe("App", () => {
 
     expect(screen.getByRole("button", { name: "60" })).toBeDisabled();
   });
+
+  it("restarts the typing session", () => {
+    render(<App />);
+
+    fireEvent.keyDown(window, {
+      key: "a",
+    });
+
+    expect(screen.getByTestId("character-0")).toHaveClass(/character--(correct|incorrect)/);
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /restart/i,
+      }),
+    );
+
+    expect(screen.getByTestId("character-0")).not.toHaveClass("character--correct");
+
+    expect(screen.getByTestId("character-0")).not.toHaveClass("character--incorrect");
+
+    expect(screen.getByText(/Time: 30/i)).toBeInTheDocument();
+  });
 });

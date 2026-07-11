@@ -121,6 +121,17 @@ interface ResultModalProps {
 
 ---
 
+## RestartButton
+
+Responsibilities:
+
+- Trigger a new typing session
+- Reset the current typing state
+- Reset the timer
+- Generate a fresh word list
+
+---
+
 ## Footer
 
 Displays small project information.
