@@ -62,6 +62,9 @@
 - 15, 30, and 60 second test options
 - Active duration state
 - Disabled duration controls during active tests
+- Restart button
+- Full typing session reset
+- Fresh word generation on restart
 
 ### Changed
 
