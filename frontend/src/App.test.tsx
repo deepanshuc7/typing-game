@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import App from "./App";
 
 describe("App", () => {
@@ -89,5 +89,23 @@ describe("App", () => {
     expect(screen.getByTestId("character-0")).not.toHaveClass("character--incorrect");
 
     expect(screen.getByText(/Time: 30/i)).toBeInTheDocument();
+  });
+
+  it("shows results when the timer finishes", async () => {
+    vi.useFakeTimers();
+
+    render(<App />);
+
+    fireEvent.keyDown(window, {
+      key: "a",
+    });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(30000);
+    });
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    vi.useRealTimers();
   });
 });

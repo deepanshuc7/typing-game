@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/Header";
 import { StatsBar } from "@/components/stats/StatsBar";
 import { TypingArea } from "@/components/typing/TypingArea";
 import { RestartButton } from "@/components/controls/RestartButton";
+import { ResultModal } from "@/components/results/ResultModal";
 import { words } from "@/data/words";
 import { useTypingSession } from "@/hooks/useTypingSession";
 import { generateWords } from "@/utils/generateWords";
@@ -83,6 +84,7 @@ function App() {
         <TypingArea targetText={targetText} typedText={state.typedText} />
 
         <RestartButton onRestart={handleRestart} />
+        <ResultModal isOpen={state.status === "finished"} stats={stats} onRestart={handleRestart} />
       </main>
 
       <Footer />
