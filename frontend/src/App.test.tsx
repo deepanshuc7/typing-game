@@ -1,16 +1,49 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 
 describe("App", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.clearAllTimers();
+    vi.useRealTimers();
+  });
+
   it("renders the main typing interface", () => {
     render(<App />);
 
-    expect(screen.getByRole("heading", { name: /typing game/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        name: /typing game/i,
+      }),
+    ).toBeInTheDocument();
 
-    expect(screen.getByRole("region", { name: /typing area/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("region", {
+        name: /typing test controls/i,
+      }),
+    ).toBeInTheDocument();
 
-    expect(screen.getByRole("region", { name: /typing statistics/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("region", {
+        name: /typing statistics/i,
+      }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("region", {
+        name: /typing area/i,
+      }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("button", {
+        name: /restart test/i,
+      }),
+    ).toBeInTheDocument();
   });
 
   it("captures keyboard input", () => {
@@ -41,18 +74,26 @@ describe("App", () => {
     expect(screen.getByTestId("character-0")).not.toHaveClass("character--incorrect");
   });
 
-  it("allows the user to change the test duration before typing starts", async () => {
+  it("allows the user to change the test duration before typing starts", () => {
     render(<App />);
 
-    const sixtySeconds = screen.getByRole("button", {
-      name: "60",
+    const controls = screen.getByRole("region", {
+      name: /typing test controls/i,
     });
 
-    fireEvent.click(sixtySeconds);
+    const sixtySecondsButton = within(controls).getByRole("button", {
+      name: "60s",
+    });
 
-    expect(sixtySeconds).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(sixtySecondsButton);
 
-    expect(await screen.findByText("Time: 60")).toBeInTheDocument();
+    expect(sixtySecondsButton).toHaveAttribute("aria-pressed", "true");
+
+    const stats = screen.getByRole("region", {
+      name: /typing statistics/i,
+    });
+
+    expect(within(stats).getByText("60s")).toBeInTheDocument();
   });
 
   it("disables duration controls after typing starts", () => {
@@ -62,11 +103,11 @@ describe("App", () => {
       key: "a",
     });
 
-    expect(screen.getByRole("button", { name: "15" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "15s" })).toBeDisabled();
 
-    expect(screen.getByRole("button", { name: "30" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "30s" })).toBeDisabled();
 
-    expect(screen.getByRole("button", { name: "60" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "60s" })).toBeDisabled();
   });
 
   it("restarts the typing session", () => {
@@ -80,7 +121,7 @@ describe("App", () => {
 
     fireEvent.click(
       screen.getByRole("button", {
-        name: /restart/i,
+        name: /restart test/i,
       }),
     );
 
@@ -88,12 +129,14 @@ describe("App", () => {
 
     expect(screen.getByTestId("character-0")).not.toHaveClass("character--incorrect");
 
-    expect(screen.getByText(/Time: 30/i)).toBeInTheDocument();
+    const stats = screen.getByRole("region", {
+      name: /typing statistics/i,
+    });
+
+    expect(within(stats).getByText("30s")).toBeInTheDocument();
   });
 
-  it("shows results when the timer finishes", async () => {
-    vi.useFakeTimers();
-
+  it("shows the results dialog when the timer finishes", async () => {
     render(<App />);
 
     fireEvent.keyDown(window, {
@@ -101,11 +144,31 @@ describe("App", () => {
     });
 
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(30000);
+      await vi.advanceTimersByTimeAsync(30_000);
     });
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    vi.useRealTimers();
+    expect(
+      screen.getByRole("heading", {
+        name: /typing results/i,
+      }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("button", {
+        name: /try again/i,
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("references the typing instructions from the typing area", () => {
+    render(<App />);
+
+    expect(
+      screen.getByRole("region", {
+        name: /typing area/i,
+      }),
+    ).toHaveAttribute("aria-describedby", "typing-instructions");
   });
 });

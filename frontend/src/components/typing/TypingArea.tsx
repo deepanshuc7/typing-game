@@ -1,12 +1,15 @@
+import "./TypingArea.css";
+
 interface TypingAreaProps {
   targetText: string;
   typedText: string;
+  describedBy?: string;
 }
 
-export function TypingArea({ targetText, typedText }: TypingAreaProps) {
+export function TypingArea({ targetText, typedText, describedBy }: TypingAreaProps) {
   return (
-    <section aria-label="Typing area">
-      <p>
+    <section className="typing-area" aria-label="Typing area" aria-describedby={describedBy}>
+      <p className="typing-area__text">
         {targetText.split("").map((character, index) => {
           const typedCharacter = typedText[index];
 

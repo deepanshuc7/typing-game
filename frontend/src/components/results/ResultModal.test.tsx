@@ -26,9 +26,20 @@ describe("ResultModal", () => {
       }),
     ).toBeInTheDocument();
 
-    expect(screen.getByText("WPM: 52")).toBeInTheDocument();
-    expect(screen.getByText("Accuracy: 96%")).toBeInTheDocument();
-    expect(screen.getByText("Correct characters: 130")).toBeInTheDocument();
+    expect(screen.getByText("WPM")).toBeInTheDocument();
+    expect(screen.getByText("52")).toBeInTheDocument();
+
+    expect(screen.getByText("Accuracy")).toBeInTheDocument();
+    expect(screen.getByText("96%")).toBeInTheDocument();
+
+    expect(screen.getByText("Correct characters")).toBeInTheDocument();
+    expect(screen.getByText("130")).toBeInTheDocument();
+
+    expect(screen.getByText("Incorrect characters")).toBeInTheDocument();
+    expect(screen.getByText("5")).toBeInTheDocument();
+
+    expect(screen.getByText("Total characters")).toBeInTheDocument();
+    expect(screen.getByText("135")).toBeInTheDocument();
   });
 
   it("calls onRestart when try again is clicked", () => {

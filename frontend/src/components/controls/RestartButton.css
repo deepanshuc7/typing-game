@@ -1,0 +1,22 @@
+.restart-button {
+  align-self: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1.25rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-weight: 600;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    transform 150ms ease;
+}
+
+.restart-button:hover {
+  border-color: var(--color-accent);
+  background: #222222;
+}
+
+.restart-button:active {
+  transform: scale(0.97);
+}

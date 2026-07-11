@@ -10,6 +10,7 @@ import { words } from "@/data/words";
 import { useTypingSession } from "@/hooks/useTypingSession";
 import { generateWords } from "@/utils/generateWords";
 import { getTargetText } from "./utils/typing";
+import "@/styles/app.css";
 
 function App() {
   const [duration, setDuration] = useState(30);
@@ -81,7 +82,15 @@ function App() {
           timeRemaining={timeRemaining}
         />
 
-        <TypingArea targetText={targetText} typedText={state.typedText} />
+        <p id="typing-instructions">
+          Start typing to begin the test. Use Backspace to correct mistakes.
+        </p>
+
+        <TypingArea
+          targetText={targetText}
+          typedText={state.typedText}
+          describedBy="typing-instructions"
+        />
 
         <RestartButton onRestart={handleRestart} />
         <ResultModal isOpen={state.status === "finished"} stats={stats} onRestart={handleRestart} />

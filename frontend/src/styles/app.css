@@ -1,0 +1,27 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  width: min(100% - 2rem, 960px);
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+header,
+footer {
+  width: min(100% - 2rem, 960px);
+  margin-inline: auto;
+  padding: 1.5rem 0;
+}
+
+footer {
+  margin-top: auto;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
