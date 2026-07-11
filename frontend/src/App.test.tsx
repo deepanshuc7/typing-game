@@ -17,7 +17,7 @@ describe("App", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: /typing game/i,
+        name: /Type Type/i,
       }),
     ).toBeInTheDocument();
 
