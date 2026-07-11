@@ -1,7 +1,7 @@
 export function Header() {
   return (
     <header>
-      <h1>Typing Game</h1>
+      <h1>Type Type</h1>
     </header>
   );
 }
