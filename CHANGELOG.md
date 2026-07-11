@@ -65,6 +65,10 @@
 - Restart button
 - Full typing session reset
 - Fresh word generation on restart
+- Typing results dialog
+- Final WPM and accuracy display
+- Character summary
+- Restart action from results
 
 ### Changed
 
