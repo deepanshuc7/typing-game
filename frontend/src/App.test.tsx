@@ -22,4 +22,22 @@ describe("App", () => {
 
     expect(screen.getByTestId("character-0")).toHaveClass(/character--(correct|incorrect)/);
   });
+
+  it("allows the user to remove typed input with Backspace", () => {
+    render(<App />);
+
+    fireEvent.keyDown(window, {
+      key: "a",
+    });
+
+    expect(screen.getByTestId("character-0")).toHaveClass(/character--(correct|incorrect)/);
+
+    fireEvent.keyDown(window, {
+      key: "Backspace",
+    });
+
+    expect(screen.getByTestId("character-0")).not.toHaveClass("character--correct");
+
+    expect(screen.getByTestId("character-0")).not.toHaveClass("character--incorrect");
+  });
 });

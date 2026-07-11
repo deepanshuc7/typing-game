@@ -12,7 +12,7 @@ import { getTargetText } from "./utils/typing";
 function App() {
   const generatedWords = useMemo(() => generateWords(words, 30), []);
 
-  const { state, stats, timeRemaining, typeCharacter } = useTypingSession({
+  const { state, stats, timeRemaining, typeCharacter, deleteCharacter } = useTypingSession({
     words: generatedWords,
     duration: 30,
   });
@@ -21,9 +21,19 @@ function App() {
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.ctrlKey || event.metaKey || event.altKey || event.key.length !== 1) {
+      if (event.ctrlKey || event.metaKey || event.altKey) {
         return;
       }
+
+      if (event.key === "Backspace") {
+        event.preventDefault();
+        deleteCharacter();
+        return;
+      }
+
+       if (event.key.length !== 1) {
+    return;
+  }
 
       typeCharacter(event.key);
     }
@@ -33,7 +43,7 @@ function App() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [typeCharacter]);
+  }, [typeCharacter, deleteCharacter]);
 
   return (
     <div className="app">
