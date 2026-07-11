@@ -9,6 +9,7 @@ interface UseTypingTestOptions {
 interface UseTypingTestResult {
   state: TypingState;
   start: () => void;
+  finish: () => void;
   typeCharacter: (character: string) => void;
   reset: () => void;
 }
@@ -77,9 +78,23 @@ export function useTypingTest({ words }: UseTypingTestOptions): UseTypingTestRes
     setState(createInitialState(words));
   }
 
+  function finish() {
+    setState((currentState) => {
+      if (currentState.status === "finished") {
+        return currentState;
+      }
+
+      return {
+        ...currentState,
+        status: "finished",
+      };
+    });
+  }
+
   return {
     state,
     start,
+    finish,
     typeCharacter,
     reset,
   };
