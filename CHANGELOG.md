@@ -69,6 +69,11 @@
 - Final WPM and accuracy display
 - Character summary
 - Restart action from results
+- Responsive application layout
+- Accessible keyboard focus states
+- Improved typing feedback styles
+- Responsive statistics layout
+- Typing instructions for assistive technology
 
 ### Changed
 

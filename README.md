@@ -85,4 +85,4 @@ This project follows an iterative development process:
 
 ## Current Status
 
-Core Typing Experience
+MVP complete, UI and accessibility polish in progress.
