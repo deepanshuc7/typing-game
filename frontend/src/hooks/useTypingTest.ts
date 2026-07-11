@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import type { TypingState } from "@/types/typing";
 import { getTargetText, isCorrectCharacter } from "@/utils/typing";
 
@@ -9,6 +9,7 @@ interface UseTypingTestOptions {
 interface UseTypingTestResult {
   state: TypingState;
   start: () => void;
+  finish: () => void;
   typeCharacter: (character: string) => void;
   reset: () => void;
 }
@@ -73,6 +74,19 @@ export function useTypingTest({ words }: UseTypingTestOptions): UseTypingTestRes
     });
   }
 
+  const finish = useCallback(() => {
+    setState((currentState) => {
+      if (currentState.status === "finished") {
+        return currentState;
+      }
+
+      return {
+        ...currentState,
+        status: "finished",
+      };
+    });
+  }, []);
+
   function reset() {
     setState(createInitialState(words));
   }
@@ -80,6 +94,7 @@ export function useTypingTest({ words }: UseTypingTestOptions): UseTypingTestRes
   return {
     state,
     start,
+    finish,
     typeCharacter,
     reset,
   };

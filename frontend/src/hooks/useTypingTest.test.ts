@@ -261,4 +261,35 @@ describe("useTypingTest", () => {
     expect(result.current.state.typedText).toBe("h");
     expect(result.current.state.currentCharacterIndex).toBe(1);
   });
+
+  it("finishes the typing test", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello"],
+      }),
+    );
+
+    act(() => {
+      result.current.start();
+      result.current.finish();
+    });
+
+    expect(result.current.state.status).toBe("finished");
+  });
+
+  it("ignores typed characters after the test is finished", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello"],
+      }),
+    );
+
+    act(() => {
+      result.current.finish();
+      result.current.typeCharacter("h");
+    });
+
+    expect(result.current.state.typedText).toBe("");
+    expect(result.current.state.currentCharacterIndex).toBe(0);
+  });
 });

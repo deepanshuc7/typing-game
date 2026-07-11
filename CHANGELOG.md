@@ -40,6 +40,10 @@
 - Timer start, stop, and reset actions
 - Timer completion callback
 - Unit tests using fake timers
+- Typing session lifecycle hook
+- Automatic timer start on first input
+- Automatic test completion when time expires
+- Combined reset behavior for timer and typing state
 
 ### Changed
 
