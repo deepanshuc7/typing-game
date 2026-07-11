@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import App from "./App";
 
@@ -11,5 +11,33 @@ describe("App", () => {
     expect(screen.getByRole("region", { name: /typing area/i })).toBeInTheDocument();
 
     expect(screen.getByRole("region", { name: /typing statistics/i })).toBeInTheDocument();
+  });
+
+  it("captures keyboard input", () => {
+    render(<App />);
+
+    fireEvent.keyDown(window, {
+      key: "a",
+    });
+
+    expect(screen.getByTestId("character-0")).toHaveClass(/character--(correct|incorrect)/);
+  });
+
+  it("allows the user to remove typed input with Backspace", () => {
+    render(<App />);
+
+    fireEvent.keyDown(window, {
+      key: "a",
+    });
+
+    expect(screen.getByTestId("character-0")).toHaveClass(/character--(correct|incorrect)/);
+
+    fireEvent.keyDown(window, {
+      key: "Backspace",
+    });
+
+    expect(screen.getByTestId("character-0")).not.toHaveClass("character--correct");
+
+    expect(screen.getByTestId("character-0")).not.toHaveClass("character--incorrect");
   });
 });

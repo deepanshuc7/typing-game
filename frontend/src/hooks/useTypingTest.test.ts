@@ -292,4 +292,79 @@ describe("useTypingTest", () => {
     expect(result.current.state.typedText).toBe("");
     expect(result.current.state.currentCharacterIndex).toBe(0);
   });
+
+  it("removes the last typed character", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("e");
+      result.current.deleteCharacter();
+    });
+
+    expect(result.current.state.typedText).toBe("h");
+    expect(result.current.state.currentCharacterIndex).toBe(1);
+  });
+
+  it("decreases mistakes when an incorrect character is removed", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("x");
+    });
+
+    expect(result.current.state.mistakes).toBe(1);
+
+    act(() => {
+      result.current.deleteCharacter();
+    });
+
+    expect(result.current.state.mistakes).toBe(0);
+  });
+
+  it("does nothing when backspace is pressed with no typed text", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hello"],
+      }),
+    );
+
+    act(() => {
+      result.current.deleteCharacter();
+    });
+
+    expect(result.current.state.typedText).toBe("");
+    expect(result.current.state.currentCharacterIndex).toBe(0);
+    expect(result.current.state.mistakes).toBe(0);
+  });
+
+  it("moves to the previous word when deleting a correctly typed separator", () => {
+    const { result } = renderHook(() =>
+      useTypingTest({
+        words: ["hi", "world"],
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+      result.current.typeCharacter("i");
+      result.current.typeCharacter(" ");
+    });
+
+    expect(result.current.state.currentWordIndex).toBe(1);
+
+    act(() => {
+      result.current.deleteCharacter();
+    });
+
+    expect(result.current.state.currentWordIndex).toBe(0);
+  });
 });

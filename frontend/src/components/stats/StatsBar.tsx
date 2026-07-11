@@ -1,10 +1,17 @@
-export function StatsBar() {
+interface StatsBarProps {
+  wpm: number;
+  accuracy: number;
+  mistakes: number;
+  timeRemaining: number;
+}
+
+export function StatsBar({ wpm, accuracy, mistakes, timeRemaining }: StatsBarProps) {
   return (
     <section aria-label="Typing statistics">
-      <p>Time: 30</p>
-      <p>WPM: 0</p>
-      <p>Accuracy: 100%</p>
-      <p>Mistakes: 0</p>
+      <p>Time: {timeRemaining}</p>
+      <p>WPM: {wpm}</p>
+      <p>Accuracy: {accuracy}%</p>
+      <p>Mistakes: {mistakes}</p>
     </section>
   );
 }

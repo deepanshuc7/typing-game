@@ -1,6 +1,8 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useTimer } from "@/hooks/useTimer";
 import { useTypingTest } from "@/hooks/useTypingTest";
+import { calculateTypingStats } from "@/utils/calculateStats";
+import { getTargetText } from "@/utils/typing";
 
 interface UseTypingSessionOptions {
   words: string[];
@@ -12,6 +14,7 @@ export function useTypingSession({ words, duration }: UseTypingSessionOptions) {
     state,
     finish,
     typeCharacter: typeTestCharacter,
+    deleteCharacter: deleteTestCharacter,
     reset: resetTypingTest,
   } = useTypingTest({ words });
 
@@ -19,33 +22,60 @@ export function useTypingSession({ words, duration }: UseTypingSessionOptions) {
     finish();
   }, [finish]);
 
-  const timer = useTimer({
+  const {
+    timeRemaining,
+    isRunning: isTimerRunning,
+    start: startTimer,
+    reset: resetTimer,
+  } = useTimer({
     duration,
     onComplete: handleTimerComplete,
   });
 
-  function typeCharacter(character: string) {
+  const targetText = useMemo(() => getTargetText(state.words), [state.words]);
+
+  const elapsedSeconds = duration - timeRemaining;
+
+  const stats = useMemo(
+    () => calculateTypingStats(targetText, state.typedText, elapsedSeconds),
+    [elapsedSeconds, state.typedText, targetText],
+  );
+
+  const typeCharacter = useCallback(
+    (character: string) => {
+      if (state.status === "finished") {
+        return;
+      }
+
+      if (state.status === "idle") {
+        startTimer();
+      }
+
+      typeTestCharacter(character);
+    },
+    [startTimer, state.status, typeTestCharacter],
+  );
+
+  const deleteCharacter = useCallback(() => {
     if (state.status === "finished") {
       return;
     }
 
-    if (state.status === "idle") {
-      timer.start();
-    }
+    deleteTestCharacter();
+  }, [deleteTestCharacter, state.status]);
 
-    typeTestCharacter(character);
-  }
-
-  function reset() {
+  const reset = useCallback(() => {
     resetTypingTest();
-    timer.reset();
-  }
+    resetTimer();
+  }, [resetTimer, resetTypingTest]);
 
   return {
     state,
-    timeRemaining: timer.timeRemaining,
-    isTimerRunning: timer.isRunning,
+    stats,
+    timeRemaining,
+    isTimerRunning,
     typeCharacter,
+    deleteCharacter,
     reset,
   };
 }

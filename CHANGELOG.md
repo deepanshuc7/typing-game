@@ -44,10 +44,26 @@
 - Automatic timer start on first input
 - Automatic test completion when time expires
 - Combined reset behavior for timer and typing state
+- Typing statistics utility functions
+- WPM calculation
+- Accuracy calculation
+- Correct and incorrect character counts
+- Combined typing statistics result
+- Live typing statistics exposed by the typing session
+- Dynamic statistics bar
+- Component tests for typing statistics display
+- Global keyboard input handling
+- Live character feedback while typing
+- Keyboard interaction test coverage
+- Backspace support
+- Correction of mistake counts after deletion
+- Word index rollback when deleting separators
 
 ### Changed
 
 - Extracted typing validation into reusable utility functions.
+- TypingArea now receives session text through props instead of generating its own words.
+- Character feedback is derived from the current typing session.
 
 ### Fixed
 
