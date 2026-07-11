@@ -74,4 +74,29 @@ describe("useTypingSession", () => {
     expect(result.current.timeRemaining).toBe(30);
     expect(result.current.isTimerRunning).toBe(false);
   });
+
+  it("ignores input after the test finishes", async () => {
+    const { result } = renderHook(() =>
+      useTypingSession({
+        words: ["hello"],
+        duration: 1,
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+    });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1000);
+    });
+
+    expect(result.current.state.status).toBe("finished");
+
+    act(() => {
+      result.current.typeCharacter("e");
+    });
+
+    expect(result.current.state.typedText).toBe("h");
+  });
 });
