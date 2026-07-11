@@ -85,3 +85,5 @@
 
 - Prevented stopping the timer from resetting the remaining time.
 - Added explicit timer reset support for duration changes.
+- Typing tests now finish immediately when the user reaches the end of the target text.
+- The countdown timer now stops when a typing test is completed early.

@@ -121,4 +121,31 @@ describe("useTypingSession", () => {
     expect(result.current.stats.incorrectCharacters).toBe(1);
     expect(result.current.stats.accuracy).toBe(50);
   });
+
+  it("finishes early and stops the timer when all text is typed", async () => {
+    const { result } = renderHook(() =>
+      useTypingSession({
+        words: ["hi"],
+        duration: 60,
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+    });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(20_000);
+    });
+
+    expect(result.current.timeRemaining).toBe(40);
+
+    act(() => {
+      result.current.typeCharacter("i");
+    });
+
+    expect(result.current.state.status).toBe("finished");
+    expect(result.current.isTimerRunning).toBe(false);
+    expect(result.current.timeRemaining).toBe(40);
+  });
 });
