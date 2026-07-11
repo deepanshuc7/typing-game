@@ -11,5 +11,7 @@ describe("App", () => {
     expect(screen.getByRole("region", { name: /typing area/i })).toBeInTheDocument();
 
     expect(screen.getByRole("region", { name: /typing statistics/i })).toBeInTheDocument();
+
+    expect(screen.getByRole("region", { name: /typing area/i })).not.toBeEmptyDOMElement();
   });
 });

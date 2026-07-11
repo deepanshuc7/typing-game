@@ -56,6 +56,8 @@
 ### Changed
 
 - Extracted typing validation into reusable utility functions.
+- TypingArea now receives session text through props instead of generating its own words.
+- Character feedback is derived from the current typing session.
 
 ### Fixed
 
