@@ -64,10 +64,13 @@ export function useTypingSession({ words, duration }: UseTypingSessionOptions) {
     deleteTestCharacter();
   }, [deleteTestCharacter, state.status]);
 
-  const reset = useCallback(() => {
-    resetTypingTest();
-    resetTimer();
-  }, [resetTimer, resetTypingTest]);
+  const reset = useCallback(
+    (nextDuration?: number) => {
+      resetTypingTest();
+      resetTimer(nextDuration);
+    },
+    [resetTimer, resetTypingTest],
+  );
 
   return {
     state,

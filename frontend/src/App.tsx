@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TestControls } from "@/components/controls/TestControls";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -10,14 +10,25 @@ import { generateWords } from "@/utils/generateWords";
 import { getTargetText } from "./utils/typing";
 
 function App() {
+  const [duration, setDuration] = useState(30);
+
   const generatedWords = useMemo(() => generateWords(words, 30), []);
 
-  const { state, stats, timeRemaining, typeCharacter, deleteCharacter } = useTypingSession({
+  const { state, stats, timeRemaining, typeCharacter, deleteCharacter, reset } = useTypingSession({
     words: generatedWords,
-    duration: 30,
+    duration,
   });
 
   const targetText = getTargetText(state.words);
+
+  function handleDurationChange(nextDuration: number) {
+    if (state.status !== "idle") {
+      return;
+    }
+
+    setDuration(nextDuration);
+    reset(nextDuration);
+  }
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -31,9 +42,9 @@ function App() {
         return;
       }
 
-       if (event.key.length !== 1) {
-    return;
-  }
+      if (event.key.length !== 1) {
+        return;
+      }
 
       typeCharacter(event.key);
     }
@@ -50,7 +61,11 @@ function App() {
       <Header />
 
       <main>
-        <TestControls />
+        <TestControls
+          selectedDuration={duration}
+          onChangeDuration={handleDurationChange}
+          disabled={state.status !== "idle"}
+        />
 
         <StatsBar
           wpm={stats.wpm}

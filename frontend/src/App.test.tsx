@@ -40,4 +40,32 @@ describe("App", () => {
 
     expect(screen.getByTestId("character-0")).not.toHaveClass("character--incorrect");
   });
+
+  it("allows the user to change the test duration before typing starts", async () => {
+    render(<App />);
+
+    const sixtySeconds = screen.getByRole("button", {
+      name: "60",
+    });
+
+    fireEvent.click(sixtySeconds);
+
+    expect(sixtySeconds).toHaveAttribute("aria-pressed", "true");
+
+    expect(await screen.findByText("Time: 60")).toBeInTheDocument();
+  });
+
+  it("disables duration controls after typing starts", () => {
+    render(<App />);
+
+    fireEvent.keyDown(window, {
+      key: "a",
+    });
+
+    expect(screen.getByRole("button", { name: "15" })).toBeDisabled();
+
+    expect(screen.getByRole("button", { name: "30" })).toBeDisabled();
+
+    expect(screen.getByRole("button", { name: "60" })).toBeDisabled();
+  });
 });

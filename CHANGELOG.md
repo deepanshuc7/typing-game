@@ -58,6 +58,10 @@
 - Backspace support
 - Correction of mistake counts after deletion
 - Word index rollback when deleting separators
+- Functional test duration controls
+- 15, 30, and 60 second test options
+- Active duration state
+- Disabled duration controls during active tests
 
 ### Changed
 
@@ -67,4 +71,5 @@
 
 ### Fixed
 
-- None
+- Prevented stopping the timer from resetting the remaining time.
+- Added explicit timer reset support for duration changes.
