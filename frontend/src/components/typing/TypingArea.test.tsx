@@ -40,4 +40,58 @@ describe("TypingArea", () => {
       }),
     ).toHaveAttribute("aria-describedby", "typing-instructions");
   });
+
+  it("shows the caret on the first character before typing starts", () => {
+  render(
+    <TypingArea
+      targetText="hello"
+      typedText=""
+    />,
+  );
+
+  expect(
+    screen.getByTestId("character-0"),
+  ).toHaveClass("character--current");
+});
+
+it("moves the caret to the next character as the user types", () => {
+  render(
+    <TypingArea
+      targetText="hello"
+      typedText="he"
+    />,
+  );
+
+  expect(
+    screen.getByTestId("character-2"),
+  ).toHaveClass("character--current");
+
+  expect(
+    screen.getByTestId("character-0"),
+  ).not.toHaveClass("character--current");
+});
+
+it("moves the caret backward when typed text is removed", () => {
+  const { rerender } = render(
+    <TypingArea
+      targetText="hello"
+      typedText="he"
+    />,
+  );
+
+  expect(
+    screen.getByTestId("character-2"),
+  ).toHaveClass("character--current");
+
+  rerender(
+    <TypingArea
+      targetText="hello"
+      typedText="h"
+    />,
+  );
+
+  expect(
+    screen.getByTestId("character-1"),
+  ).toHaveClass("character--current");
+});
 });

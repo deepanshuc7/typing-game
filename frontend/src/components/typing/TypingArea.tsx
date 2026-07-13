@@ -7,6 +7,7 @@ interface TypingAreaProps {
 }
 
 export function TypingArea({ targetText, typedText, describedBy }: TypingAreaProps) {
+  const currentCharacterIndex = typedText.length;
   return (
     <section className="typing-area" aria-label="Typing area" aria-describedby={describedBy}>
       <p className="typing-area__text">
@@ -16,6 +17,13 @@ export function TypingArea({ targetText, typedText, describedBy }: TypingAreaPro
           let className = "character";
 
           if (typedCharacter !== undefined) {
+            className =
+              typedCharacter === character
+                ? "character character--correct"
+                : "character character--incorrect";
+          }
+
+          if (index === currentCharacterIndex) {
             className =
               typedCharacter === character
                 ? "character character--correct"
