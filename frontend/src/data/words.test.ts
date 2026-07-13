@@ -7,9 +7,7 @@ describe("words", () => {
   });
 
   it("contains only lowercase alphabetic words", () => {
-    expect(
-      words.every((word) => /^[a-z]+$/.test(word)),
-    ).toBe(true);
+    expect(words.every((word) => /^[a-z]+$/.test(word))).toBe(true);
   });
 
   it("does not contain duplicate words", () => {
@@ -19,8 +17,6 @@ describe("words", () => {
   });
 
   it("does not contain empty words", () => {
-    expect(
-      words.every((word) => word.length > 0),
-    ).toBe(true);
+    expect(words.every((word) => word.length > 0)).toBe(true);
   });
 });
