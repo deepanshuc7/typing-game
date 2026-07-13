@@ -16,6 +16,8 @@ interface CaretPosition {
 export function TypingArea({ targetText, typedText, describedBy }: TypingAreaProps) {
   const currentCharacterIndex = typedText.length;
 
+  const typingAreaRef = useRef<HTMLElement | null>(null);
+
   const containerRef = useRef<HTMLParagraphElement>(null);
 
   const characterRefs = useRef<Array<HTMLSpanElement | null>>([]);
@@ -31,13 +33,22 @@ export function TypingArea({ targetText, typedText, describedBy }: TypingAreaPro
   const [isCaretMoving, setIsCaretMoving] = useState(false);
 
   useLayoutEffect(() => {
+    const typingArea = typingAreaRef.current;
     const container = containerRef.current;
-
     const currentCharacter = characterRefs.current[currentCharacterIndex];
 
-    if (!container || !currentCharacter) {
+    if (!typingArea || !container || !currentCharacter) {
       return;
     }
+
+    const visibleLineHeight = typingArea.clientHeight / 3;
+
+    const targetScrollTop = Math.max(0, currentCharacter.offsetTop - visibleLineHeight);
+
+    typingArea.scrollTo({
+      top: targetScrollTop,
+      behavior: "smooth",
+    });
 
     const containerRect = container.getBoundingClientRect();
 
@@ -71,7 +82,12 @@ export function TypingArea({ targetText, typedText, describedBy }: TypingAreaPro
     .join(" ");
 
   return (
-    <section className="typing-area" aria-label="Typing area" aria-describedby={describedBy}>
+    <section
+      ref={typingAreaRef}
+      className="typing-area"
+      aria-label="Typing area"
+      aria-describedby={describedBy}
+    >
       <p ref={containerRef} className="typing-area__text">
         <span
           data-testid="typing-caret"

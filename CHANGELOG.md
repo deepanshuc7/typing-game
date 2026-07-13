@@ -7,6 +7,7 @@
 - Current-character caret to indicate the active typing position.
 - Caret movement when typing or deleting characters.
 - Reduced-motion support for the caret animation.
+- Fixed-height typing area that follows the current typing position.
 
 ### Changed
 
@@ -14,6 +15,9 @@
 - Caret blinking now resumes only after movement finishes.
 
 ### Fixed
+
+- Increased generated typing content for longer test durations.
+- Word count now scales with the selected test duration.
 
 ## [1.0.0] - 2026-07-11
 

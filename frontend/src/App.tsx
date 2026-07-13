@@ -10,12 +10,15 @@ import { words } from "@/data/words";
 import { useTypingSession } from "@/hooks/useTypingSession";
 import { generateWords } from "@/utils/generateWords";
 import { getTargetText } from "./utils/typing";
+import { getWordCountForDuration } from "./utils/getWordCountForDuration";
 import "@/styles/app.css";
 
 function App() {
   const [duration, setDuration] = useState(30);
 
-  const [generatedWords, setGeneratedWords] = useState(() => generateWords(words, 30));
+  const [generatedWords, setGeneratedWords] = useState(() =>
+    generateWords(words, getWordCountForDuration(30)),
+  );
 
   const { state, stats, timeRemaining, typeCharacter, deleteCharacter, reset } = useTypingSession({
     words: generatedWords,
@@ -30,11 +33,14 @@ function App() {
     }
 
     setDuration(nextDuration);
+
+    setGeneratedWords(generateWords(words, getWordCountForDuration(nextDuration)));
+
     reset(nextDuration);
   }
 
   function handleRestart() {
-    setGeneratedWords(generateWords(words, 30));
+    setGeneratedWords(generateWords(words, getWordCountForDuration(duration)));
     reset();
   }
 
