@@ -1,5 +1,17 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Current-character caret to indicate the active typing position.
+- Caret movement when typing or deleting characters.
+- Reduced-motion support for the caret animation.
+
+### Changed
+
+### Fixed
+
 ## [1.0.0] - 2026-07-11
 
 ### Added
