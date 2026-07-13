@@ -15,6 +15,9 @@
 
 ### Fixed
 
+- Increased generated typing content for longer test durations.
+- Word count now scales with the selected test duration.
+
 ## [1.0.0] - 2026-07-11
 
 ### Added
