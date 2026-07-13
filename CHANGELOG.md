@@ -8,6 +8,8 @@
 - Caret movement when typing or deleting characters.
 - Reduced-motion support for the caret animation.
 - Fixed-height typing area that follows the current typing position.
+- Playwright end-to-end testing.
+- Browser-level coverage for typing, restart, and duration-selection flows.
 
 ### Changed
 
