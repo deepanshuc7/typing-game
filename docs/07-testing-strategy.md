@@ -56,16 +56,19 @@ Examples:
 * ResultModal opens when the test ends.
 * DurationSelector updates the selected duration.
 
-### End-to-End Tests (Future)
+### End-to-End Tests 
 
-Future versions may include browser-based tests to validate complete user flows.
+Playwright is used for browser-level end-to-end testing.
 
-Examples:
+End-to-end tests cover behavior that requires a real browser environment, including:
 
-* Start a typing test.
-* Complete a typing test.
-* Restart the test.
-* Verify results are displayed.
+- Keyboard interaction
+- Typing session lifecycle
+- Test duration controls
+- Restart behavior
+- Results modal behavior
+- Typing viewport scrolling
+- Caret positioning and movement
 
 ---
 
