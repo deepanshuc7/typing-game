@@ -6,34 +6,50 @@ interface TypingAreaProps {
   describedBy?: string;
 }
 
-export function TypingArea({ targetText, typedText, describedBy }: TypingAreaProps) {
+export function TypingArea({
+  targetText,
+  typedText,
+  describedBy,
+}: TypingAreaProps) {
   const currentCharacterIndex = typedText.length;
+
   return (
-    <section className="typing-area" aria-label="Typing area" aria-describedby={describedBy}>
+    <section
+      className="typing-area"
+      aria-label="Typing area"
+      aria-describedby={describedBy}
+    >
       <p className="typing-area__text">
         {targetText.split("").map((character, index) => {
-          const typedCharacter = typedText[index];
+          const hasBeenTyped = index < typedText.length;
+          const isCurrentCharacter = index === currentCharacterIndex;
 
-          let className = "character";
+          const isCorrect =
+            hasBeenTyped &&
+            typedText[index] === character;
 
-          if (typedCharacter !== undefined) {
-            className =
-              typedCharacter === character
-                ? "character character--correct"
-                : "character character--incorrect";
+          const isIncorrect =
+            hasBeenTyped &&
+            typedText[index] !== character;
+
+          const classNames = ["character"];
+
+          if (isCorrect) {
+            classNames.push("character--correct");
           }
 
-          if (index === currentCharacterIndex) {
-            className =
-              typedCharacter === character
-                ? "character character--correct"
-                : "character character--incorrect";
+          if (isIncorrect) {
+            classNames.push("character--incorrect");
+          }
+
+          if (isCurrentCharacter) {
+            classNames.push("character--current");
           }
 
           return (
             <span
               key={`${character}-${index}`}
-              className={className}
+              className={classNames.join(" ")}
               data-testid={`character-${index}`}
             >
               {character}
