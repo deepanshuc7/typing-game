@@ -7,6 +7,7 @@
 - Current-character caret to indicate the active typing position.
 - Caret movement when typing or deleting characters.
 - Reduced-motion support for the caret animation.
+- Fixed-height typing area that follows the current typing position.
 
 ### Changed
 
