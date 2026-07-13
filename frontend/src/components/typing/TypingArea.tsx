@@ -13,105 +13,71 @@ interface CaretPosition {
   height: number;
 }
 
-export function TypingArea({
-  targetText,
-  typedText,
-  describedBy,
-}: TypingAreaProps) {
+export function TypingArea({ targetText, typedText, describedBy }: TypingAreaProps) {
   const currentCharacterIndex = typedText.length;
 
   const typingAreaRef = useRef<HTMLElement | null>(null);
 
   const containerRef = useRef<HTMLParagraphElement>(null);
 
-  const characterRefs =
-    useRef<Array<HTMLSpanElement | null>>([]);
+  const characterRefs = useRef<Array<HTMLSpanElement | null>>([]);
 
-  const movementTimeoutRef =
-    useRef<number | null>(null);
+  const movementTimeoutRef = useRef<number | null>(null);
 
-  const [caretPosition, setCaretPosition] =
-    useState<CaretPosition>({
-      x: 0,
-      y: 0,
-      height: 0,
-    });
+  const [caretPosition, setCaretPosition] = useState<CaretPosition>({
+    x: 0,
+    y: 0,
+    height: 0,
+  });
 
-  const [isCaretMoving, setIsCaretMoving] =
-    useState(false);
+  const [isCaretMoving, setIsCaretMoving] = useState(false);
 
   useLayoutEffect(() => {
     const typingArea = typingAreaRef.current;
     const container = containerRef.current;
-    const currentCharacter =
-      characterRefs.current[currentCharacterIndex];
+    const currentCharacter = characterRefs.current[currentCharacterIndex];
 
-    if (
-      !typingArea ||
-      !container ||
-      !currentCharacter
-    ) {
+    if (!typingArea || !container || !currentCharacter) {
       return;
     }
 
-    const visibleLineHeight =
-      typingArea.clientHeight / 3;
+    const visibleLineHeight = typingArea.clientHeight / 3;
 
-    const targetScrollTop = Math.max(
-      0,
-      currentCharacter.offsetTop -
-        visibleLineHeight,
-    );
+    const targetScrollTop = Math.max(0, currentCharacter.offsetTop - visibleLineHeight);
 
     typingArea.scrollTo({
       top: targetScrollTop,
       behavior: "smooth",
     });
 
-    const containerRect =
-      container.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
 
-    const characterRect =
-      currentCharacter.getBoundingClientRect();
+    const characterRect = currentCharacter.getBoundingClientRect();
 
     setIsCaretMoving(true);
 
     setCaretPosition({
-      x:
-        characterRect.left -
-        containerRect.left,
-      y:
-        characterRect.top -
-        containerRect.top,
+      x: characterRect.left - containerRect.left,
+      y: characterRect.top - containerRect.top,
       height: characterRect.height,
     });
 
     if (movementTimeoutRef.current !== null) {
-      window.clearTimeout(
-        movementTimeoutRef.current,
-      );
+      window.clearTimeout(movementTimeoutRef.current);
     }
 
-    movementTimeoutRef.current =
-      window.setTimeout(() => {
-        setIsCaretMoving(false);
-      }, 100);
+    movementTimeoutRef.current = window.setTimeout(() => {
+      setIsCaretMoving(false);
+    }, 100);
 
     return () => {
       if (movementTimeoutRef.current !== null) {
-        window.clearTimeout(
-          movementTimeoutRef.current,
-        );
+        window.clearTimeout(movementTimeoutRef.current);
       }
     };
   }, [currentCharacterIndex, targetText]);
 
-  const caretClassName = [
-    "typing-caret",
-    isCaretMoving
-      ? "typing-caret--moving"
-      : "",
-  ]
+  const caretClassName = ["typing-caret", isCaretMoving ? "typing-caret--moving" : ""]
     .filter(Boolean)
     .join(" ");
 
@@ -122,10 +88,7 @@ export function TypingArea({
       aria-label="Typing area"
       aria-describedby={describedBy}
     >
-      <p
-        ref={containerRef}
-        className="typing-area__text"
-      >
+      <p ref={containerRef} className="typing-area__text">
         <span
           data-testid="typing-caret"
           className={caretClassName}
@@ -136,48 +99,36 @@ export function TypingArea({
           }}
         />
 
-        {targetText
-          .split("")
-          .map((character, index) => {
-            const hasBeenTyped =
-              index < typedText.length;
+        {targetText.split("").map((character, index) => {
+          const hasBeenTyped = index < typedText.length;
 
-            const isCorrect =
-              hasBeenTyped &&
-              typedText[index] === character;
+          const isCorrect = hasBeenTyped && typedText[index] === character;
 
-            const isIncorrect =
-              hasBeenTyped &&
-              typedText[index] !== character;
+          const isIncorrect = hasBeenTyped && typedText[index] !== character;
 
-            const classNames = ["character"];
+          const classNames = ["character"];
 
-            if (isCorrect) {
-              classNames.push(
-                "character--correct",
-              );
-            }
+          if (isCorrect) {
+            classNames.push("character--correct");
+          }
 
-            if (isIncorrect) {
-              classNames.push(
-                "character--incorrect",
-              );
-            }
+          if (isIncorrect) {
+            classNames.push("character--incorrect");
+          }
 
-            return (
-              <span
-                key={`${character}-${index}`}
-                ref={(element) => {
-                  characterRefs.current[index] =
-                    element;
-                }}
-                className={classNames.join(" ")}
-                data-testid={`character-${index}`}
-              >
-                {character}
-              </span>
-            );
-          })}
+          return (
+            <span
+              key={`${character}-${index}`}
+              ref={(element) => {
+                characterRefs.current[index] = element;
+              }}
+              className={classNames.join(" ")}
+              data-testid={`character-${index}`}
+            >
+              {character}
+            </span>
+          );
+        })}
       </p>
     </section>
   );
