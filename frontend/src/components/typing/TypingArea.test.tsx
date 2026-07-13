@@ -6,7 +6,11 @@ describe("TypingArea", () => {
   it("renders the target text", () => {
     render(<TypingArea targetText="hello" typedText="" />);
 
-    expect(screen.getByRole("region", { name: /typing area/i })).toHaveTextContent("hello");
+    expect(
+      screen.getByRole("region", {
+        name: /typing area/i,
+      }),
+    ).toHaveTextContent("hello");
   });
 
   it("marks correctly typed characters", () => {
@@ -26,18 +30,40 @@ describe("TypingArea", () => {
   });
 
   it("references the typing instructions", () => {
-    render(
-      <>
-        <p id="typing-instructions">Start typing to begin the test.</p>
-
-        <TypingArea targetText="hello" typedText="" describedBy="typing-instructions" />
-      </>,
-    );
+    render(<TypingArea targetText="hello" typedText="" describedBy="typing-instructions" />);
 
     expect(
       screen.getByRole("region", {
         name: /typing area/i,
       }),
     ).toHaveAttribute("aria-describedby", "typing-instructions");
+  });
+
+  it("renders a typing caret", () => {
+    render(<TypingArea targetText="hello" typedText="" />);
+
+    expect(screen.getByTestId("typing-caret")).toBeInTheDocument();
+  });
+
+  it("keeps the caret rendered as typed text changes", () => {
+    const { rerender } = render(<TypingArea targetText="hello" typedText="" />);
+
+    expect(screen.getByTestId("typing-caret")).toBeInTheDocument();
+
+    rerender(<TypingArea targetText="hello" typedText="he" />);
+
+    expect(screen.getByTestId("typing-caret")).toBeInTheDocument();
+  });
+
+  it("removes typed character styling when text is deleted", () => {
+    const { rerender } = render(<TypingArea targetText="hello" typedText="he" />);
+
+    expect(screen.getByTestId("character-1")).toHaveClass("character--correct");
+
+    rerender(<TypingArea targetText="hello" typedText="h" />);
+
+    expect(screen.getByTestId("character-1")).not.toHaveClass("character--correct");
+
+    expect(screen.getByTestId("character-1")).not.toHaveClass("character--incorrect");
   });
 });
