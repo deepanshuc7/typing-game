@@ -1,4 +1,8 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import "./TypingArea.css";
 
 interface TypingAreaProps {
@@ -13,35 +17,66 @@ interface CaretPosition {
   height: number;
 }
 
-export function TypingArea({ targetText, typedText, describedBy }: TypingAreaProps) {
+export function TypingArea({
+  targetText,
+  typedText,
+  describedBy,
+}: TypingAreaProps) {
   const currentCharacterIndex = typedText.length;
 
-  const containerRef = useRef<HTMLParagraphElement>(null);
+  const typingAreaRef =
+    useRef<HTMLElement | null>(null);
 
-  const characterRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const containerRef =
+    useRef<HTMLParagraphElement>(null);
 
-  const movementTimeoutRef = useRef<number | null>(null);
+  const characterRefs =
+    useRef<Array<HTMLSpanElement | null>>([]);
 
-  const [caretPosition, setCaretPosition] = useState<CaretPosition>({
-    x: 0,
-    y: 0,
-    height: 0,
-  });
+  const movementTimeoutRef =
+    useRef<number | null>(null);
 
-  const [isCaretMoving, setIsCaretMoving] = useState(false);
+  const [caretPosition, setCaretPosition] =
+    useState<CaretPosition>({
+      x: 0,
+      y: 0,
+      height: 0,
+    });
+
+  const [isCaretMoving, setIsCaretMoving] =
+    useState(false);
 
   useLayoutEffect(() => {
+    const typingArea = typingAreaRef.current;
     const container = containerRef.current;
+    const currentCharacter =
+      characterRefs.current[currentCharacterIndex];
 
-    const currentCharacter = characterRefs.current[currentCharacterIndex];
-
-    if (!container || !currentCharacter) {
+    if (
+      !typingArea ||
+      !container ||
+      !currentCharacter
+    ) {
       return;
     }
 
-    const containerRect = container.getBoundingClientRect();
+    currentCharacter.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest",
+    });
 
-    const characterRect = currentCharacter.getBoundingClientRect();
+    const characterTop = currentCharacter.offsetTop;
+
+    const targetScrollTop = characterTop - typingArea.clientHeight / 2 + currentCharacter.clientHeight / 2;
+
+    typingArea.scrollTo({top: targetScrollTop, behavior: "smooth"});
+
+    const containerRect =
+      container.getBoundingClientRect();
+
+    const characterRect =
+      currentCharacter.getBoundingClientRect();
 
     setIsCaretMoving(true);
 
@@ -52,27 +87,45 @@ export function TypingArea({ targetText, typedText, describedBy }: TypingAreaPro
     });
 
     if (movementTimeoutRef.current !== null) {
-      window.clearTimeout(movementTimeoutRef.current);
+      window.clearTimeout(
+        movementTimeoutRef.current,
+      );
     }
 
-    movementTimeoutRef.current = window.setTimeout(() => {
-      setIsCaretMoving(false);
-    }, 100);
+    movementTimeoutRef.current =
+      window.setTimeout(() => {
+        setIsCaretMoving(false);
+      }, 100);
 
     return () => {
       if (movementTimeoutRef.current !== null) {
-        window.clearTimeout(movementTimeoutRef.current);
+        window.clearTimeout(
+          movementTimeoutRef.current,
+        );
       }
     };
   }, [currentCharacterIndex, targetText]);
 
-  const caretClassName = ["typing-caret", isCaretMoving ? "typing-caret--moving" : ""]
+  const caretClassName = [
+    "typing-caret",
+    isCaretMoving
+      ? "typing-caret--moving"
+      : "",
+  ]
     .filter(Boolean)
     .join(" ");
 
   return (
-    <section className="typing-area" aria-label="Typing area" aria-describedby={describedBy}>
-      <p ref={containerRef} className="typing-area__text">
+    <section
+      ref={typingAreaRef}
+      className="typing-area"
+      aria-label="Typing area"
+      aria-describedby={describedBy}
+    >
+      <p
+        ref={containerRef}
+        className="typing-area__text"
+      >
         <span
           data-testid="typing-caret"
           className={caretClassName}
@@ -84,27 +137,37 @@ export function TypingArea({ targetText, typedText, describedBy }: TypingAreaPro
         />
 
         {targetText.split("").map((character, index) => {
-          const hasBeenTyped = index < typedText.length;
+          const hasBeenTyped =
+            index < typedText.length;
 
-          const isCorrect = hasBeenTyped && typedText[index] === character;
+          const isCorrect =
+            hasBeenTyped &&
+            typedText[index] === character;
 
-          const isIncorrect = hasBeenTyped && typedText[index] !== character;
+          const isIncorrect =
+            hasBeenTyped &&
+            typedText[index] !== character;
 
           const classNames = ["character"];
 
           if (isCorrect) {
-            classNames.push("character--correct");
+            classNames.push(
+              "character--correct",
+            );
           }
 
           if (isIncorrect) {
-            classNames.push("character--incorrect");
+            classNames.push(
+              "character--incorrect",
+            );
           }
 
           return (
             <span
               key={`${character}-${index}`}
               ref={(element) => {
-                characterRefs.current[index] = element;
+                characterRefs.current[index] =
+                  element;
               }}
               className={classNames.join(" ")}
               data-testid={`character-${index}`}
