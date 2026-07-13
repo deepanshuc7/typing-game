@@ -1,11 +1,18 @@
 .typing-area {
   max-height: 14rem;
-  overflow: hidden;
+  /* height: 10rem; */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
   position: relative;
   padding: 2rem;
-  /* border: 1px solid var(--color-border); */
-  /* border-radius: var(--radius-md); */
-  /* background: var(--color-surface); */
+  /* border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface); */
+}
+
+.typing-area::-webkit-scrollbar {
+  display: none;
 }
 
 .typing-area__text {

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { TypingArea } from "./TypingArea";
 
 describe("TypingArea", () => {
@@ -48,8 +48,6 @@ describe("TypingArea", () => {
   it("keeps the caret rendered as typed text changes", () => {
     const { rerender } = render(<TypingArea targetText="hello" typedText="" />);
 
-    expect(screen.getByTestId("typing-caret")).toBeInTheDocument();
-
     rerender(<TypingArea targetText="hello" typedText="he" />);
 
     expect(screen.getByTestId("typing-caret")).toBeInTheDocument();
@@ -65,5 +63,20 @@ describe("TypingArea", () => {
     expect(screen.getByTestId("character-1")).not.toHaveClass("character--correct");
 
     expect(screen.getByTestId("character-1")).not.toHaveClass("character--incorrect");
+  });
+
+  it("scrolls the typing area as the current character changes", () => {
+    const scrollToSpy = vi.spyOn(HTMLElement.prototype, "scrollTo");
+
+    const { rerender } = render(<TypingArea targetText="hello world" typedText="" />);
+
+    scrollToSpy.mockClear();
+
+    rerender(<TypingArea targetText="hello world" typedText="hello" />);
+
+    expect(scrollToSpy).toHaveBeenCalledWith({
+      top: expect.any(Number),
+      behavior: "smooth",
+    });
   });
 });
