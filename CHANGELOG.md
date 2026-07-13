@@ -1,5 +1,20 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Current-character caret to indicate the active typing position.
+- Caret movement when typing or deleting characters.
+- Reduced-motion support for the caret animation.
+
+### Changed
+
+- Improved caret movement so it remains visible while transitioning between characters.
+- Caret blinking now resumes only after movement finishes.
+
+### Fixed
+
 ## [1.0.0] - 2026-07-11
 
 ### Added
