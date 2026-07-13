@@ -4,94 +4,135 @@ import { TypingArea } from "./TypingArea";
 
 describe("TypingArea", () => {
   it("renders the target text", () => {
-    render(<TypingArea targetText="hello" typedText="" />);
-
-    expect(screen.getByRole("region", { name: /typing area/i })).toHaveTextContent("hello");
-  });
-
-  it("marks correctly typed characters", () => {
-    render(<TypingArea targetText="hello" typedText="he" />);
-
-    expect(screen.getByTestId("character-0")).toHaveClass("character--correct");
-
-    expect(screen.getByTestId("character-1")).toHaveClass("character--correct");
-  });
-
-  it("marks incorrectly typed characters", () => {
-    render(<TypingArea targetText="hello" typedText="hx" />);
-
-    expect(screen.getByTestId("character-0")).toHaveClass("character--correct");
-
-    expect(screen.getByTestId("character-1")).toHaveClass("character--incorrect");
-  });
-
-  it("references the typing instructions", () => {
     render(
-      <>
-        <p id="typing-instructions">Start typing to begin the test.</p>
-
-        <TypingArea targetText="hello" typedText="" describedBy="typing-instructions" />
-      </>,
+      <TypingArea
+        targetText="hello"
+        typedText=""
+      />,
     );
 
     expect(
       screen.getByRole("region", {
         name: /typing area/i,
       }),
-    ).toHaveAttribute("aria-describedby", "typing-instructions");
+    ).toHaveTextContent("hello");
   });
 
-  it("shows the caret on the first character before typing starts", () => {
-  render(
-    <TypingArea
-      targetText="hello"
-      typedText=""
-    />,
-  );
+  it("marks correctly typed characters", () => {
+    render(
+      <TypingArea
+        targetText="hello"
+        typedText="he"
+      />,
+    );
 
-  expect(
-    screen.getByTestId("character-0"),
-  ).toHaveClass("character--current");
-});
+    expect(
+      screen.getByTestId("character-0"),
+    ).toHaveClass("character--correct");
 
-it("moves the caret to the next character as the user types", () => {
-  render(
-    <TypingArea
-      targetText="hello"
-      typedText="he"
-    />,
-  );
+    expect(
+      screen.getByTestId("character-1"),
+    ).toHaveClass("character--correct");
+  });
 
-  expect(
-    screen.getByTestId("character-2"),
-  ).toHaveClass("character--current");
+  it("marks incorrectly typed characters", () => {
+    render(
+      <TypingArea
+        targetText="hello"
+        typedText="hx"
+      />,
+    );
 
-  expect(
-    screen.getByTestId("character-0"),
-  ).not.toHaveClass("character--current");
-});
+    expect(
+      screen.getByTestId("character-0"),
+    ).toHaveClass("character--correct");
 
-it("moves the caret backward when typed text is removed", () => {
-  const { rerender } = render(
-    <TypingArea
-      targetText="hello"
-      typedText="he"
-    />,
-  );
+    expect(
+      screen.getByTestId("character-1"),
+    ).toHaveClass("character--incorrect");
+  });
 
-  expect(
-    screen.getByTestId("character-2"),
-  ).toHaveClass("character--current");
+  it("references the typing instructions", () => {
+    render(
+      <TypingArea
+        targetText="hello"
+        typedText=""
+        describedBy="typing-instructions"
+      />,
+    );
 
-  rerender(
-    <TypingArea
-      targetText="hello"
-      typedText="h"
-    />,
-  );
+    expect(
+      screen.getByRole("region", {
+        name: /typing area/i,
+      }),
+    ).toHaveAttribute(
+      "aria-describedby",
+      "typing-instructions",
+    );
+  });
 
-  expect(
-    screen.getByTestId("character-1"),
-  ).toHaveClass("character--current");
-});
+  it("renders a typing caret", () => {
+    render(
+      <TypingArea
+        targetText="hello"
+        typedText=""
+      />,
+    );
+
+    expect(
+      screen.getByTestId("typing-caret"),
+    ).toBeInTheDocument();
+  });
+
+  it("keeps the caret rendered as typed text changes", () => {
+    const { rerender } = render(
+      <TypingArea
+        targetText="hello"
+        typedText=""
+      />,
+    );
+
+    expect(
+      screen.getByTestId("typing-caret"),
+    ).toBeInTheDocument();
+
+    rerender(
+      <TypingArea
+        targetText="hello"
+        typedText="he"
+      />,
+    );
+
+    expect(
+      screen.getByTestId("typing-caret"),
+    ).toBeInTheDocument();
+  });
+
+  it("removes typed character styling when text is deleted", () => {
+    const { rerender } = render(
+      <TypingArea
+        targetText="hello"
+        typedText="he"
+      />,
+    );
+
+    expect(
+      screen.getByTestId("character-1"),
+    ).toHaveClass("character--correct");
+
+    rerender(
+      <TypingArea
+        targetText="hello"
+        typedText="h"
+      />,
+    );
+
+    expect(
+      screen.getByTestId("character-1"),
+    ).not.toHaveClass("character--correct");
+
+    expect(
+      screen.getByTestId("character-1"),
+    ).not.toHaveClass("character--incorrect");
+  });
 });

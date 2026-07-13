@@ -10,6 +10,9 @@
 
 ### Changed
 
+- Improved caret movement so it remains visible while transitioning between characters.
+- Caret blinking now resumes only after movement finishes.
+
 ### Fixed
 
 ## [1.0.0] - 2026-07-11
