@@ -1,21 +1,17 @@
-import type { MouseEvent } from "react";
-import type { TypingStats } from "@/types/typing";
+import { PerformanceChart } from "@/components/results/PerformanceChart";
+import type { TypingSample, TypingStats } from "@/types/typing";
 import "./ResultModal.css";
 
 interface ResultModalProps {
   isOpen: boolean;
   stats: TypingStats;
+  samples: TypingSample[];
   onRestart: () => void;
 }
 
-export function ResultModal({ isOpen, stats, onRestart }: ResultModalProps) {
+export function ResultModal({ isOpen, stats, samples, onRestart }: ResultModalProps) {
   if (!isOpen) {
     return null;
-  }
-
-  function handleRestart(event: MouseEvent<HTMLButtonElement>) {
-    onRestart();
-    event.currentTarget.blur();
   }
 
   return (
@@ -43,6 +39,8 @@ export function ResultModal({ isOpen, stats, onRestart }: ResultModalProps) {
           </div>
         </div>
 
+        <PerformanceChart samples={samples} />
+
         <div className="result-modal__details">
           <div>
             <span>Correct characters</span>
@@ -60,7 +58,7 @@ export function ResultModal({ isOpen, stats, onRestart }: ResultModalProps) {
           </div>
         </div>
 
-        <button className="result-modal__button" type="button" onClick={handleRestart}>
+        <button className="result-modal__button" type="button" onClick={onRestart}>
           Try again
         </button>
       </section>

@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import type { TypingSample } from "@/types/typing";
 import { ResultModal } from "./ResultModal";
 
 const stats = {
@@ -10,15 +11,20 @@ const stats = {
   totalCharacters: 135,
 };
 
+const samples: TypingSample[] = [
+  { second: 1, wpm: 36, rawWpm: 48, accuracy: 75, mistakes: 1 },
+  { second: 2, wpm: 52, rawWpm: 54, accuracy: 96, mistakes: 1 },
+];
+
 describe("ResultModal", () => {
   it("does not render when closed", () => {
-    render(<ResultModal isOpen={false} stats={stats} onRestart={() => undefined} />);
+    render(<ResultModal isOpen={false} stats={stats} samples={[]} onRestart={() => undefined} />);
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
   it("displays typing results when open", () => {
-    render(<ResultModal isOpen stats={stats} onRestart={() => undefined} />);
+    render(<ResultModal isOpen stats={stats} samples={[]} onRestart={() => undefined} />);
 
     expect(
       screen.getByRole("heading", {
@@ -45,7 +51,7 @@ describe("ResultModal", () => {
   it("calls onRestart when try again is clicked", () => {
     const onRestart = vi.fn();
 
-    render(<ResultModal isOpen stats={stats} onRestart={onRestart} />);
+    render(<ResultModal isOpen stats={stats} samples={[]} onRestart={onRestart} />);
 
     fireEvent.click(
       screen.getByRole("button", {
@@ -56,19 +62,11 @@ describe("ResultModal", () => {
     expect(onRestart).toHaveBeenCalledTimes(1);
   });
 
-  it("releases focus after restarting", () => {
-    render(<ResultModal isOpen stats={stats} onRestart={() => undefined} />);
+  it("displays the recorded performance graph", () => {
+    render(<ResultModal isOpen stats={stats} samples={samples} onRestart={() => undefined} />);
 
-    const tryAgainButton = screen.getByRole("button", {
-      name: /try again/i,
-    });
-
-    tryAgainButton.focus();
-
-    expect(tryAgainButton).toHaveFocus();
-
-    fireEvent.click(tryAgainButton);
-
-    expect(tryAgainButton).not.toHaveFocus();
+    expect(screen.getByRole("img")).toHaveAccessibleName(
+      "WPM ranged from 36 to 52 and finished at 52.",
+    );
   });
 });
