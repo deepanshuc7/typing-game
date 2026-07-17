@@ -171,4 +171,33 @@ describe("App", () => {
       }),
     ).toHaveAttribute("aria-describedby", "typing-instructions");
   });
+
+  it("allows Space input after restarting with the focused restart button", () => {
+    render(<App />);
+
+    fireEvent.keyDown(window, {
+      key: "a",
+    });
+
+    const restartButton = screen.getByRole("button", {
+      name: /restart test/i,
+    });
+
+    restartButton.focus();
+    fireEvent.keyDown(restartButton, {
+      key: "Enter",
+    });
+
+    fireEvent.click(restartButton);
+
+    expect(restartButton).not.toHaveFocus();
+
+    fireEvent.keyDown(window, {
+      key: " ",
+    });
+
+    expect(screen.getByTestId("character-0")).toHaveClass(
+      /character--correct|character--incorrect/,
+    );
+  });
 });
