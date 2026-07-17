@@ -62,10 +62,10 @@ describe("ResultModal", () => {
     expect(onRestart).toHaveBeenCalledTimes(1);
   });
 
-  it("displays the recorded performance graph", () => {
+  it("displays the recorded performance graph", async () => {
     render(<ResultModal isOpen stats={stats} samples={samples} onRestart={() => undefined} />);
 
-    expect(screen.getByRole("img")).toHaveAccessibleName(
+    expect(await screen.findByRole("img")).toHaveAccessibleName(
       "WPM ranged from 36 to 52 and finished at 52.",
     );
   });

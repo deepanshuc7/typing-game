@@ -1,6 +1,12 @@
-import { PerformanceChart } from "@/components/results/PerformanceChart";
+import { lazy, Suspense } from "react";
 import type { TypingSample, TypingStats } from "@/types/typing";
 import "./ResultModal.css";
+
+const PerformanceChart = lazy(() =>
+  import("@/components/results/PerformanceChart").then((module) => ({
+    default: module.PerformanceChart,
+  })),
+);
 
 interface ResultModalProps {
   isOpen: boolean;
@@ -39,7 +45,15 @@ export function ResultModal({ isOpen, stats, samples, onRestart }: ResultModalPr
           </div>
         </div>
 
-        <PerformanceChart samples={samples} />
+        <Suspense
+          fallback={
+            <div className="result-modal__chart-loading" role="status">
+              Loading performance graph…
+            </div>
+          }
+        >
+          <PerformanceChart samples={samples} />
+        </Suspense>
 
         <div className="result-modal__details">
           <div>

@@ -54,6 +54,17 @@
   background: var(--color-background);
 }
 
+.result-modal__chart-loading {
+  display: grid;
+  min-height: 20rem;
+  margin-bottom: 1.75rem;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-background);
+  color: var(--color-text-muted);
+}
+
 .result-modal__highlight > div {
   display: flex;
   flex-direction: column;
