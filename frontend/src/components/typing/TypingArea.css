@@ -11,6 +11,10 @@
   background: var(--color-surface); */
 }
 
+.typing-area:focus {
+  outline: none;
+}
+
 .typing-area::-webkit-scrollbar {
   display: none;
 }

@@ -16,20 +16,4 @@ describe("RestartButton", () => {
 
     expect(onRestart).toHaveBeenCalledTimes(1);
   });
-
-  it("releases focus after restarting", () => {
-    render(<RestartButton onRestart={() => undefined} />);
-
-    const restartButton = screen.getByRole("button", {
-      name: /restart test/i,
-    });
-
-    restartButton.focus();
-
-    expect(restartButton).toHaveFocus();
-
-    fireEvent.click(restartButton);
-
-    expect(restartButton).not.toHaveFocus();
-  });
 });

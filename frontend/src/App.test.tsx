@@ -46,6 +46,12 @@ describe("App", () => {
     ).toBeInTheDocument();
   });
 
+  it("starts with the typing area focused", () => {
+    render(<App />);
+
+    expect(screen.getByRole("region", { name: /typing area/i })).toHaveFocus();
+  });
+
   it("captures keyboard input", () => {
     render(<App />);
 
@@ -172,7 +178,7 @@ describe("App", () => {
     ).toHaveAttribute("aria-describedby", "typing-instructions");
   });
 
-  it("allows Space input after restarting with the focused restart button", () => {
+  it("returns focus to the typing area after restarting", () => {
     render(<App />);
 
     fireEvent.keyDown(window, {
@@ -190,7 +196,7 @@ describe("App", () => {
 
     fireEvent.click(restartButton);
 
-    expect(restartButton).not.toHaveFocus();
+    expect(screen.getByRole("region", { name: /typing area/i })).toHaveFocus();
 
     fireEvent.keyDown(window, {
       key: " ",
