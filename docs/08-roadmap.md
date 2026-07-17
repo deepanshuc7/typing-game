@@ -89,11 +89,12 @@ This roadmap outlines the planned development phases for the Typing Game project
 
 * Display final results
 * Restart the test
+* Display a per-second WPM and raw-WPM performance graph
 * Improve user experience
 
 ### Deliverables
 
-* Results screen
+* Results screen with an accessible performance visualization
 * Improved interactions
 
 **Status:** Complete

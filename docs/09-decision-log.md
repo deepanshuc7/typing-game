@@ -294,6 +294,36 @@ This keeps character lookup simple while allowing the interface to highlight the
 
 ---
 
+# ADR-011: Result Performance Visualization
+
+**Status:** Accepted
+**Date:** 2026-07-17
+
+## Context
+
+The results experience needs to show how typing speed changed during a test, including WPM, raw WPM, and mistake points. Building responsive axes, tooltips, legends, and line rendering from scratch would add substantial presentation logic. Loading a complete charting library with the initial typing interface would also increase startup cost for functionality used only after a test finishes.
+
+## Decision
+
+Record chart-ready `TypingSample` values once per timer second in `useTypingSession`. Render the result with Recharts in a standalone `PerformanceChart` component that is lazy-loaded by `ResultModal`.
+
+## Rationale
+
+- Session ownership ensures samples reset and finish with the typing test.
+- A pure sampling utility keeps WPM and raw-WPM calculations independently testable.
+- Recharts provides responsive SVG charts, axes, tooltips, and legends using React components.
+- Lazy loading keeps Recharts out of the initial application bundle.
+- A textual summary and empty state keep the visualization understandable without relying exclusively on the SVG or color.
+
+## Consequences
+
+- Recharts is a production dependency.
+- The performance chart is delivered as a separate build chunk after results are shown.
+- Result-modal tests must account for asynchronous chart loading.
+- Chart calculations and sampling behavior remain covered independently from third-party rendering internals.
+
+---
+
 # Future Decisions
 
 This document should be updated whenever a significant architectural or technical decision is made.

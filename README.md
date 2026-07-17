@@ -16,6 +16,7 @@ The application will allow users to:
 * Measure typing speed (WPM)
 * Measure typing accuracy
 * View typing statistics
+* Review WPM, raw WPM, and mistakes on a performance graph after each test
 * Improve typing performance over time
 
 ---
@@ -46,6 +47,8 @@ Production deployments are created from the main branch.
 * Tailwind CSS (planned)
 * Vitest
 * React Testing Library
+* Recharts
+* Playwright
 
 ### Backend (Future)
 
