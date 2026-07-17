@@ -10,18 +10,24 @@
 - Fixed-height typing area that follows the current typing position.
 - Playwright end-to-end testing.
 - Browser-level coverage for typing, restart, and duration-selection flows.
+- Per-second performance sampling for WPM, raw WPM, accuracy, and mistakes.
+- Responsive performance graph in the results modal.
+- Accessible graph summaries, tooltips, legend, and empty state.
+- Recharts visualization dependency, loaded only when test results are displayed.
 
 ### Changed
 
 - Improved caret movement so it remains visible while transitioning between characters.
 - Caret blinking now resumes only after movement finishes.
+- Refactored game orchestration, keyboard handling, and typing-area focus into focused hooks.
+- Expanded the results modal with a responsive graph and statistics-card layout.
 
 ### Fixed
 
 - Increased generated typing content for longer test durations.
 - Word count now scales with the selected test duration.
-- Restart and Try Again buttons now release focus after starting a new test.
-- Space can be typed normally immediately after restarting with the keyboard.           clien
+- Restart and Try Again return focus to the typing area after starting a new test.
+- Space can be typed normally without scrolling the focused typing area or reactivating Restart.
 
 ## [1.0.0] - 2026-07-11
 

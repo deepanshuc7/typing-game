@@ -122,6 +122,89 @@ describe("useTypingSession", () => {
     expect(result.current.stats.accuracy).toBe(50);
   });
 
+  it("records one performance sample per elapsed second", async () => {
+    const { result } = renderHook(() =>
+      useTypingSession({
+        words: ["hello"],
+        duration: 30,
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+    });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1000);
+    });
+
+    expect(result.current.samples).toHaveLength(1);
+    expect(result.current.samples[0]).toMatchObject({
+      second: 1,
+      accuracy: 100,
+      mistakes: 0,
+    });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1000);
+    });
+
+    expect(result.current.samples.map((sample) => sample.second)).toEqual([1, 2]);
+  });
+
+  it("updates the latest sample when the test finishes within that second", async () => {
+    const { result } = renderHook(() =>
+      useTypingSession({
+        words: ["hi"],
+        duration: 30,
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+    });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1000);
+    });
+
+    act(() => {
+      result.current.typeCharacter("i");
+    });
+
+    expect(result.current.samples).toHaveLength(1);
+    expect(result.current.samples[0]).toMatchObject({
+      second: 1,
+      rawWpm: 24,
+      accuracy: 100,
+    });
+  });
+
+  it("clears performance samples when the session resets", async () => {
+    const { result } = renderHook(() =>
+      useTypingSession({
+        words: ["hello"],
+        duration: 30,
+      }),
+    );
+
+    act(() => {
+      result.current.typeCharacter("h");
+    });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1000);
+    });
+
+    expect(result.current.samples).toHaveLength(1);
+
+    act(() => {
+      result.current.reset();
+    });
+
+    expect(result.current.samples).toEqual([]);
+  });
+
   it("finishes early and stops the timer when all text is typed", async () => {
     const { result } = renderHook(() =>
       useTypingSession({

@@ -57,6 +57,7 @@ function App() {
         <ResultModal
           isOpen={game.state.status === "finished"}
           stats={game.stats}
+          samples={game.samples}
           onRestart={handleRestart}
         />
       </main>

@@ -112,12 +112,33 @@ Props:
 ```ts
 interface ResultModalProps {
   isOpen: boolean;
-  wpm: number;
-  accuracy: number;
-  mistakes: number;
+  stats: TypingStats;
+  samples: TypingSample[];
   onRestart: () => void;
 }
 ```
+
+Responsibilities:
+
+- Present final typing statistics
+- Provide a responsive container for the performance graph
+- Trigger a new test through the supplied callback
+
+---
+
+## PerformanceChart
+
+Displays WPM and raw WPM over time, with mistake markers and an accessible textual summary.
+
+Props:
+
+```ts
+interface PerformanceChartProps {
+  samples: TypingSample[];
+}
+```
+
+The component is lazy-loaded by `ResultModal` so the charting library is downloaded only when results are shown.
 
 ---
 
@@ -125,10 +146,10 @@ interface ResultModalProps {
 
 Responsibilities:
 
-- Trigger a new typing session
-- Reset the current typing state
-- Reset the timer
-- Generate a fresh word list
+- Render the restart action
+- Invoke the supplied restart callback
+
+Session reset, fresh-word generation, and typing-area focus restoration are coordinated outside the button.
 
 ---
 
@@ -172,4 +193,5 @@ Possible future components:
 - [x] TestControls
 - [x] StatsBar
 - [x] TypingArea
-- [ ] ResultModal
+- [x] ResultModal
+- [x] PerformanceChart

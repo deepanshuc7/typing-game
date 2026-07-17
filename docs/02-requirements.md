@@ -93,6 +93,14 @@ The user shall be able to restart the typing test without refreshing the page.
 
 ---
 
+### FR-010 Performance Graph
+
+After a test finishes, the application shall display a responsive graph of WPM and raw WPM over time, with mistake indicators and a textual summary.
+
+Performance samples shall reset when a new test begins.
+
+---
+
 ## 4. Non-Functional Requirements
 
 ### Performance
@@ -107,6 +115,7 @@ The user shall be able to restart the typing test without refreshing the page.
 * Responsive layout
 * Accessible color contrast
 * Keyboard-first interaction
+* Result visualizations with an accessible text alternative
 
 ### Maintainability
 

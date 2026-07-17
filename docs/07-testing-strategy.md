@@ -40,6 +40,7 @@ Unit tests will cover individual functions and business logic.
 Examples:
 
 * WPM calculation
+* Raw WPM and performance-sample calculation
 * Accuracy calculation
 * Character comparison
 * Word generation
@@ -54,6 +55,7 @@ Examples:
 * TypingArea renders correctly.
 * StatsBar displays current values.
 * ResultModal opens when the test ends.
+* PerformanceChart exposes a readable summary and handles empty data.
 * DurationSelector updates the selected duration.
 
 ### End-to-End Tests 
@@ -67,6 +69,8 @@ End-to-end tests cover behavior that requires a real browser environment, includ
 - Test duration controls
 - Restart behavior
 - Results modal behavior
+- Keyboard focus flow between the typing area and Restart
+- Prevention of native Space-key scrolling in the typing area
 - Typing viewport scrolling
 - Caret positioning and movement
 
@@ -79,10 +83,10 @@ The project will use:
 * Vitest
 * React Testing Library
 * Jest DOM
+* Playwright
 
 Future:
 
-* Playwright (optional)
 * GitHub Actions for automated test execution
 
 ---
@@ -99,6 +103,7 @@ Critical logic that directly affects user results.
 * Timer behavior
 * Test completion
 * Restart logic
+* Per-second performance sampling and reset behavior
 
 ### Medium Priority
 
@@ -106,6 +111,7 @@ Component rendering and user interactions.
 
 * Statistics display
 * Result modal
+* Performance graph accessibility and empty state
 * Duration selector
 
 ### Low Priority
