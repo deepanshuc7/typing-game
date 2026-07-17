@@ -20,6 +20,8 @@
 
 - Increased generated typing content for longer test durations.
 - Word count now scales with the selected test duration.
+- Restart and Try Again buttons now release focus after starting a new test.
+- Space can be typed normally immediately after restarting with the keyboard.           clien
 
 ## [1.0.0] - 2026-07-11
 

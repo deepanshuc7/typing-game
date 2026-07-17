@@ -55,4 +55,20 @@ describe("ResultModal", () => {
 
     expect(onRestart).toHaveBeenCalledTimes(1);
   });
+
+  it("releases focus after restarting", () => {
+    render(<ResultModal isOpen stats={stats} onRestart={() => undefined} />);
+
+    const tryAgainButton = screen.getByRole("button", {
+      name: /try again/i,
+    });
+
+    tryAgainButton.focus();
+
+    expect(tryAgainButton).toHaveFocus();
+
+    fireEvent.click(tryAgainButton);
+
+    expect(tryAgainButton).not.toHaveFocus();
+  });
 });

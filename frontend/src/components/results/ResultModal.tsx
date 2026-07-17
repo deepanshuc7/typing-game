@@ -1,3 +1,4 @@
+import type { MouseEvent } from "react";
 import type { TypingStats } from "@/types/typing";
 import "./ResultModal.css";
 
@@ -10,6 +11,11 @@ interface ResultModalProps {
 export function ResultModal({ isOpen, stats, onRestart }: ResultModalProps) {
   if (!isOpen) {
     return null;
+  }
+
+  function handleRestart(event: MouseEvent<HTMLButtonElement>) {
+    onRestart();
+    event.currentTarget.blur();
   }
 
   return (
@@ -54,7 +60,7 @@ export function ResultModal({ isOpen, stats, onRestart }: ResultModalProps) {
           </div>
         </div>
 
-        <button className="result-modal__button" type="button" onClick={onRestart}>
+        <button className="result-modal__button" type="button" onClick={handleRestart}>
           Try again
         </button>
       </section>
