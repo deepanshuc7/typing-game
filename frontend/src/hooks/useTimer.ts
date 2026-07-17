@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface UseTimerOptions {
   duration: number;
   onComplete?: () => void;
+  onTick?: (timeRemaining: number) => void;
 }
 
 interface UseTimerResult {
@@ -13,9 +14,10 @@ interface UseTimerResult {
   reset: (nextDuration?: number) => void;
 }
 
-export function useTimer({ duration, onComplete }: UseTimerOptions): UseTimerResult {
+export function useTimer({ duration, onComplete, onTick }: UseTimerOptions): UseTimerResult {
   const [timeRemaining, setTimeRemaining] = useState(duration);
   const [isRunning, setIsRunning] = useState(false);
+  const timeRemainingRef = useRef(duration);
 
   useEffect(() => {
     if (!isRunning) {
@@ -23,23 +25,23 @@ export function useTimer({ duration, onComplete }: UseTimerOptions): UseTimerRes
     }
 
     const intervalId = window.setInterval(() => {
-      setTimeRemaining((currentTime) => {
-        const nextTime = Math.max(currentTime - 1, 0);
+      const nextTime = Math.max(timeRemainingRef.current - 1, 0);
 
-        if (nextTime === 0) {
-          window.clearInterval(intervalId);
-          setIsRunning(false);
-          onComplete?.();
-        }
+      timeRemainingRef.current = nextTime;
+      setTimeRemaining(nextTime);
+      onTick?.(nextTime);
 
-        return nextTime;
-      });
+      if (nextTime === 0) {
+        window.clearInterval(intervalId);
+        setIsRunning(false);
+        onComplete?.();
+      }
     }, 1000);
 
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [isRunning, onComplete]);
+  }, [isRunning, onComplete, onTick]);
 
   const start = useCallback(() => {
     if (timeRemaining <= 0) {
@@ -62,6 +64,7 @@ export function useTimer({ duration, onComplete }: UseTimerOptions): UseTimerRes
   const reset = useCallback(
     (nextDuration = duration) => {
       setIsRunning(false);
+      timeRemainingRef.current = nextDuration;
       setTimeRemaining(nextDuration);
     },
     [duration],
