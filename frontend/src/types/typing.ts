@@ -25,3 +25,15 @@ export interface TypingStats {
 
   totalCharacters: number;
 }
+
+export interface TypingSample {
+  second: number;
+
+  wpm: number;
+
+  rawWpm: number;
+
+  accuracy: number;
+
+  mistakes: number;
+}
