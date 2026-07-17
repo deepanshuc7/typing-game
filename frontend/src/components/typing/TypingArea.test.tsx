@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { TypingArea } from "./TypingArea";
 
@@ -11,6 +11,23 @@ describe("TypingArea", () => {
         name: /typing area/i,
       }),
     ).toHaveTextContent("hello");
+  });
+
+  it("is keyboard focusable", () => {
+    render(<TypingArea targetText="hello" typedText="" />);
+
+    expect(screen.getByRole("region", { name: /typing area/i })).toHaveAttribute("tabindex", "0");
+  });
+
+  it("prevents Space from scrolling while focused", () => {
+    render(<TypingArea targetText="hello world" typedText="" />);
+
+    const typingArea = screen.getByRole("region", { name: /typing area/i });
+
+    typingArea.focus();
+
+    expect(fireEvent.keyDown(typingArea, { key: " ", cancelable: true })).toBe(false);
+    expect(typingArea).toHaveFocus();
   });
 
   it("marks correctly typed characters", () => {

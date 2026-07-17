@@ -73,19 +73,33 @@ test.describe("Typing Game", () => {
     await expect(stats).toContainText("60s");
   });
 
-  test("releases restart button focus so Space can be typed", async ({ page }) => {
+  test("tabs from the typing area to restart and returns focus after restarting", async ({
+    page,
+  }) => {
     await page.goto("/");
 
-    await page.keyboard.type("a");
+    const typingArea = page.getByRole("region", {
+      name: /typing area/i,
+    });
 
     const restartButton = page.getByRole("button", {
       name: /restart test/i,
     });
 
-    await restartButton.focus();
+    await expect(typingArea).toBeFocused();
+
+    const scrollBeforeSpace = await typingArea.evaluate((element) => element.scrollTop);
+    await page.keyboard.press("Space");
+    await expect(typingArea).toBeFocused();
+    await expect
+      .poll(() => typingArea.evaluate((element) => element.scrollTop))
+      .toBe(scrollBeforeSpace);
+
+    await page.keyboard.press("Tab");
+    await expect(restartButton).toBeFocused();
     await page.keyboard.press("Enter");
 
-    await expect(restartButton).not.toBeFocused();
+    await expect(typingArea).toBeFocused();
 
     await page.keyboard.press("Space");
 

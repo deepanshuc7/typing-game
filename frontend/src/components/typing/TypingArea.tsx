@@ -1,10 +1,18 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type Ref,
+} from "react";
 import "./TypingArea.css";
 
 interface TypingAreaProps {
   targetText: string;
   typedText: string;
   describedBy?: string;
+  ref?: Ref<HTMLElement>;
 }
 
 interface CaretPosition {
@@ -13,10 +21,29 @@ interface CaretPosition {
   height: number;
 }
 
-export function TypingArea({ targetText, typedText, describedBy }: TypingAreaProps) {
+function preventSpaceScroll(event: KeyboardEvent<HTMLElement>) {
+  if (event.key === " ") {
+    event.preventDefault();
+  }
+}
+
+export function TypingArea({ targetText, typedText, describedBy, ref }: TypingAreaProps) {
   const currentCharacterIndex = typedText.length;
 
-  const typingAreaRef = useRef<HTMLElement | null>(null);
+  const internalTypingAreaRef = useRef<HTMLElement | null>(null);
+
+  const setTypingAreaRef = useCallback(
+    (element: HTMLElement | null) => {
+      internalTypingAreaRef.current = element;
+
+      if (typeof ref === "function") {
+        ref(element);
+      } else if (ref) {
+        ref.current = element;
+      }
+    },
+    [ref],
+  );
 
   const containerRef = useRef<HTMLParagraphElement>(null);
 
@@ -33,7 +60,7 @@ export function TypingArea({ targetText, typedText, describedBy }: TypingAreaPro
   const [isCaretMoving, setIsCaretMoving] = useState(false);
 
   useLayoutEffect(() => {
-    const typingArea = typingAreaRef.current;
+    const typingArea = internalTypingAreaRef.current;
     const container = containerRef.current;
     const currentCharacter = characterRefs.current[currentCharacterIndex];
 
@@ -83,8 +110,10 @@ export function TypingArea({ targetText, typedText, describedBy }: TypingAreaPro
 
   return (
     <section
-      ref={typingAreaRef}
+      ref={setTypingAreaRef}
       className="typing-area"
+      tabIndex={0}
+      onKeyDown={preventSpaceScroll}
       aria-label="Typing area"
       aria-describedby={describedBy}
     >
