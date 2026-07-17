@@ -72,4 +72,25 @@ test.describe("Typing Game", () => {
 
     await expect(stats).toContainText("60s");
   });
+
+  test("releases restart button focus so Space can be typed", async ({ page }) => {
+    await page.goto("/");
+
+    await page.keyboard.type("a");
+
+    const restartButton = page.getByRole("button", {
+      name: /restart test/i,
+    });
+
+    await restartButton.focus();
+    await page.keyboard.press("Enter");
+
+    await expect(restartButton).not.toBeFocused();
+
+    await page.keyboard.press("Space");
+
+    await expect(page.getByTestId("character-0")).toHaveClass(
+      /character--correct|character--incorrect/,
+    );
+  });
 });
